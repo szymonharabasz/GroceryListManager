@@ -9,7 +9,7 @@
     <h:outputStylesheet library="css" name="index.css?#{listsController.creationDate}"/>
 </h:head>
 <h:body>
-     <p:dataView value="#{listsController.lists}" var="list" varStatus="status" gridRowStyle="background-color: aquamarine" >
+     <p:dataView value="#{listsController.lists}" var="list" varStatus="status" layout="list">
          <p:dataViewListItem>
              <h:form>
                  <div class="listWrapper">
@@ -72,11 +72,9 @@
                              </div>
                          </p:dataViewListItem>
                      </p:dataView>
-                     <h:form rendered="#{list.expanded}">
-                         <p:commandButton value="Add new item">
-                             <p:ajax event="click" listener="#{listsController.addItem(list.id)}" process="@all" update="@all"/>
-                         </p:commandButton>
-                     </h:form>
+                     <p:commandButton value="Add new item" rendered="#{list.expanded}">
+                         <p:ajax event="click" listener="#{listsController.addItem(list.id)}" process="@all" update="@all"/>
+                     </p:commandButton>
                  </div>
              </h:form>
          </p:dataViewListItem>

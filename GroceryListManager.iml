@@ -47,5 +47,21 @@
     <orderEntry type="library" scope="TEST" name="Maven: org.junit.jupiter:junit-jupiter-engine:5.7.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.junit.platform:junit-platform-engine:1.7.1" level="project" />
     <orderEntry type="library" name="Maven: org.primefaces:primefaces:10.0.0" level="project" />
+    <orderEntry type="library" name="Maven: org.eclipse.jnosql.mapping:mapping-document:1.0.0-b3" level="project" />
+    <orderEntry type="library" name="Maven: org.eclipse.jnosql.communication:communication-document:1.0.0-b3" level="project" />
+    <orderEntry type="library" name="Maven: org.eclipse.jnosql.communication:communication-core:1.0.0-b3" level="project" />
+    <orderEntry type="library" name="Maven: jakarta.nosql.communication:communication-core:1.0.0-b3" level="project" />
+    <orderEntry type="library" name="Maven: org.eclipse.jnosql.communication:communication-query:1.0.0-b3" level="project" />
+    <orderEntry type="library" name="Maven: org.antlr:antlr4-runtime:4.9.1" level="project" />
+    <orderEntry type="library" name="Maven: jakarta.nosql.communication:communication-query:1.0.0-b3" level="project" />
+    <orderEntry type="library" name="Maven: jakarta.nosql.communication:communication-document:1.0.0-b3" level="project" />
+    <orderEntry type="library" name="Maven: org.eclipse.jnosql.mapping:mapping-core:1.0.0-b3" level="project" />
+    <orderEntry type="library" name="Maven: jakarta.nosql.mapping:mapping-core:1.0.0-b3" level="project" />
+    <orderEntry type="library" name="Maven: jakarta.nosql.mapping:mapping-document:1.0.0-b3" level="project" />
+    <orderEntry type="library" name="Maven: org.eclipse.jnosql.communication:mongodb-driver:1.0.0-b3" level="project" />
+    <orderEntry type="library" name="Maven: org.eclipse.jnosql.communication:communication-driver-commons:1.0.0-b3" level="project" />
+    <orderEntry type="library" name="Maven: org.mongodb:mongodb-driver-sync:4.2.1" level="project" />
+    <orderEntry type="library" name="Maven: org.mongodb:bson:4.2.1" level="project" />
+    <orderEntry type="library" name="Maven: org.mongodb:mongodb-driver-core:4.2.1" level="project" />
   </component>
 </module>

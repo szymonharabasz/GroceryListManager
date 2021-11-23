@@ -43,3 +43,7 @@ div.itemWrapper {
     width: 100%;
     overflow: hidden;
 }
+
+.ui-dataview-header {
+    display: none;
+}

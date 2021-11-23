@@ -79,6 +79,7 @@ public class ListsController {
     }
 
     public void removeItem(String id) {
+        System.err.println("Request to remove an item");
         service.removeItem(id);
     }
 
