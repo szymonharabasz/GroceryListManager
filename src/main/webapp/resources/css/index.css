@@ -1,0 +1,20 @@
+div.listName {
+    width: 20%;
+    float: left;
+
+}
+
+div.listDesc {
+    width: 50%;
+    float: left;
+}
+
+div.listButton {
+    width: 30%;
+    float: left;
+}
+
+div.listWrapper {
+    width: 100%;
+    overflow: hidden;
+}
