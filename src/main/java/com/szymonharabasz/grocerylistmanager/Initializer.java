@@ -9,15 +9,15 @@ import java.util.logging.Logger;
 
 @Singleton
 @Startup
-public class ListsLoader {
+public class Initializer {
     @Inject
     private ListsService service;
-    Logger logger = Logger.getLogger(ListsLoader.class.getName());
+    private Logger logger = Logger.getLogger(Initializer.class.getName());
     @PostConstruct
     public void loadLists() {
         GroceryList list1 = new GroceryList(generateID(), "Aldi", "Shopping list for Aldi");
-        list1.addItem(new GroceryItem("Potatoes", "kg", 1.0f));
-        list1.addItem(new GroceryItem("Tomatoes", "kg", 0.5f));
+        list1.addItem(new GroceryItem(generateID(), "Potatoes", "kg", 1.0f));
+        list1.addItem(new GroceryItem(generateID(), "Tomatoes", "kg", 0.5f));
         GroceryList list2 = new GroceryList(generateID(), "Rewe", "Shopping list for Rewe");
         service.addList(list1);
         service.addList(list2);

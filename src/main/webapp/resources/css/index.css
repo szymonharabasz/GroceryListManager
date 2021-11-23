@@ -9,12 +9,37 @@ div.listDesc {
     float: left;
 }
 
-div.listButton {
+div.listButtons {
     width: 30%;
     float: left;
 }
 
 div.listWrapper {
+    width: 100%;
+    overflow: hidden;
+}
+
+div.itemName {
+    width: 30%;
+    float: left;
+}
+
+div.itemQuantity {
+    width: 15%;
+    float: left;
+}
+
+div.itemUnit {
+    width: 15%;
+    float: left;
+}
+
+div.itemButtons {
+    width: 30%;
+    float: left;
+}
+
+div.itemWrapper {
     width: 100%;
     overflow: hidden;
 }

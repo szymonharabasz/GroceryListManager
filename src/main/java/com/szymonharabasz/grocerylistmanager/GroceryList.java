@@ -12,6 +12,7 @@ public class GroceryList implements Serializable {
     private String description;
     private List<GroceryItem> items = new ArrayList<>();
     private boolean edited;
+    private boolean expanded;
 
     private Logger logger = Logger.getLogger(GroceryList.class.getName());
 
@@ -56,12 +57,26 @@ public class GroceryList implements Serializable {
         this.description = description;
     }
 
+    public List<GroceryItem> getItems() { return items; }
+
+    void setItems(List<GroceryItem> items) {
+        this.items = items;
+    }
+
     public void setEdited(boolean edited) {
         this.edited = edited;
     }
 
     public boolean isEdited() {
         return edited;
+    }
+
+    public boolean isExpanded() {
+        return expanded;
+    }
+
+    public void setExpanded(boolean expanded) {
+        this.expanded = expanded;
     }
 
     @Override

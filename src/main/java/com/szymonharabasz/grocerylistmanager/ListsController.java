@@ -1,26 +1,17 @@
 package com.szymonharabasz.grocerylistmanager;
 
-import javax.annotation.PostConstruct;
-import javax.el.ValueExpression;
 import javax.enterprise.context.ApplicationScoped;
-import javax.faces.component.UIComponent;
-import javax.faces.component.html.HtmlCommandButton;
-import javax.faces.component.html.HtmlInputText;
-import javax.faces.context.FacesContext;
-import javax.faces.event.ActionEvent;
-import javax.faces.event.AjaxBehaviorEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 @Named
 @ApplicationScoped
 public class ListsController {
     private ListsService service;
+    private Date creationDate = new Date();
 
     private String greeting;
     @Inject
@@ -45,21 +36,54 @@ public class ListsController {
 
     public void setGreeting(String greeting) { this.greeting = greeting; }
 
-    public void makeEditable(String id) {
-        GroceryList list = service.findById(id);
+    public void editList(String id) {
+        GroceryList list = service.findList(id);
         list.setEdited(true);
     }
 
-    public void saveChages(String id) {
-        GroceryList list = service.findById(id);
+    public void saveList(String id) {
+        GroceryList list = service.findList(id);
         list.setEdited(false);
     }
 
-    public void remove(String id) {
+    public void expand(String id) {
+        GroceryList list = service.findList(id);
+        list.setExpanded(true);
+    }
+
+    public void collapse(String id) {
+        GroceryList list = service.findList(id);
+        list.setExpanded(false);
+    }
+
+    public void removeList(String id) {
         service.removeList(id);
     }
 
-    public void add() {
+    public void addList() {
         service.addList();
+    }
+
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    public void editItem(String id) {
+        GroceryItem item = service.findItem(id);
+        item.setEdited(true);
+    }
+
+    public void saveItem(String id) {
+        GroceryItem item = service.findItem(id);
+        item.setEdited(false);
+    }
+
+    public void removeItem(String id) {
+        service.removeItem(id);
+    }
+
+    public void addItem(String listId) {
+        System.err.println("Request to add an item");
+        service.addItem(listId);
     }
 }

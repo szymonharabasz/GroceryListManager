@@ -4,14 +4,25 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class GroceryItem implements Serializable {
+    private String id;
     private String name;
     private String unit;
     private float quantity;
+    private boolean edited;
 
-    public GroceryItem(String name, String unit, float quantity) {
+    public GroceryItem(String id, String name, String unit, float quantity) {
+        this.id = id;
         this.name = name;
         this.unit = unit;
         this.quantity = quantity;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -36,6 +47,14 @@ public class GroceryItem implements Serializable {
 
     public void setQuantity(float quantity) {
         this.quantity = quantity;
+    }
+
+    public boolean isEdited() {
+        return edited;
+    }
+
+    public void setEdited(boolean edited) {
+        this.edited = edited;
     }
 
     @Override

@@ -26,8 +26,17 @@ public class ListsService {
         lists.add(list);
     }
 
-    public GroceryList findById(String id) {
+    public GroceryList findList(String id) {
         for (GroceryList list : lists) if (Objects.equals(list.getId(), id)) return list;
+        return null;
+    }
+
+    public GroceryItem findItem(String id) {
+        for (GroceryList list : lists) {
+            for (GroceryItem item : list.getItems()) {
+                if (Objects.equals(item.getId(), id)) return item;
+            }
+        }
         return null;
     }
 
@@ -35,9 +44,25 @@ public class ListsService {
         lists = lists.stream().filter(l -> !Objects.equals(l.getId(), id)).collect(Collectors.toList());
     }
 
+    public void removeItem(String id) {
+        for (GroceryList list : lists) {
+            list.setItems(
+                    list.getItems().stream().filter(item ->
+                            !Objects.equals(item.getId(), id)).collect(Collectors.toList())
+            );
+        }
+    }
+
     public void addList() {
         GroceryList list = new GroceryList(UUID.randomUUID().toString(), "", "");
         list.setEdited(true);
         lists.add(list);
+    }
+
+    public void addItem(String listId) {
+        GroceryItem item = new GroceryItem(UUID.randomUUID().toString(), "", "", 0.0f);
+        item.setEdited(true);
+        findList(listId).addItem(item);
+        System.err.println("A new item added");
     }
 }

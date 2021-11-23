@@ -3,12 +3,10 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
 <h:head>
     <title>Grocery List Manager</title>
-    <h:outputStylesheet library="css" name="index.css"/>
+    <h:outputStylesheet library="css" name="index.css?#{listsController.creationDate}"/>
 </h:head>
 <h:body>
      <p:dataView value="#{listsController.lists}" var="list" varStatus="status" gridRowStyle="background-color: aquamarine" >
@@ -16,7 +14,8 @@
              <h:form>
                  <div class="listWrapper">
                      <div class="listName">
-                         <h:outputText id="outName#{list.id}" rendered="#{!list.edited}" value="#{list.name}"/>
+                         <h:outputText id="outName#{list.id}" rendered="#{!list.edited}" value="#{list.name}"
+                            style="vertical-align: center"/>
                          <p:inputText label="inName#{list.id}" id="inName#{list.id}" rendered="#{list.edited}"
                                  value="#{list.name}"/>
                      </div>
@@ -25,24 +24,66 @@
                          <p:inputText label="inDesc#{list.id}" id="inDesc#{list.id}" rendered="#{list.edited}"
                                  value="#{list.description}"/>
                      </div>
-                     <div class="listButton">
+                     <div class="listButtons">
+                         <p:commandButton rendered="#{!list.expanded}" value="Expand">
+                             <p:ajax event="click" listener="#{listsController.expand(list.id)}" process="@all" update="@all"/>
+                         </p:commandButton>
+                         <p:commandButton rendered="#{list.expanded}" value="Collapse">
+                             <p:ajax event="click" listener="#{listsController.collapse(list.id)}" process="@all" update="@all"/>
+                         </p:commandButton>
                          <p:commandButton rendered="#{!list.edited}" value="Edit #{status.index}" label="btnEdit#{list.id}">
-                            <p:ajax event="click" listener="#{listsController.makeEditable(list.id)}" process="@all" update="@all"/>
+                            <p:ajax event="click" listener="#{listsController.editList(list.id)}" process="@all" update="@all"/>
                          </p:commandButton>
                          <p:commandButton rendered="#{list.edited}" value="Save">
-                            <p:ajax event="click" listener="#{listsController.saveChages(list.id)}" process="@all" update="@all"/>
+                            <p:ajax event="click" listener="#{listsController.saveList(list.id)}" process="@all" update="@all"/>
                          </p:commandButton>
                          <p:commandButton value="Delete">
-                             <p:ajax event="click" listener="#{listsController.remove(list.id)}" process="@all" update="@all"/>
+                             <p:ajax event="click" listener="#{listsController.removeList(list.id)}" process="@all" update="@all"/>
                          </p:commandButton>
                      </div>
+                 </div>
+                 <div>
+                     <p:dataView value="#{list.items}" var="item" rendered="#{list.expanded}">
+                         <p:dataViewListItem>
+                             <div class="itemWrapper">
+                                <div class="itemName">
+                                    <h:outputText value="#{item.name}" rendered="#{!item.edited}"/>
+                                    <p:inputText value="#{item.name}" rendered="#{item.edited}"/>
+                                </div>
+                                <div class="itemQuantity">
+                                    <h:outputText value="#{item.quantity}" rendered="#{!item.edited}"/>
+                                    <p:inputText value="#{item.quantity}" rendered="#{item.edited}"/>
+                                </div>
+                                <div class="itemUnit">
+                                    <h:outputText value="#{item.unit}" rendered="#{!item.edited}"/>
+                                    <p:inputText value="#{item.unit}" rendered="#{item.edited}"/>
+                                </div>
+                                 <div class="itemButton">
+                                     <p:commandButton rendered="#{!item.edited}" value="Edit">
+                                         <p:ajax event="click" listener="#{listsController.editItem(item.id)}" process="@all" update="@all"/>
+                                     </p:commandButton>
+                                     <p:commandButton rendered="#{item.edited}" value="Save">
+                                         <p:ajax event="click" listener="#{listsController.saveItem(item.id)}" process="@all" update="@all"/>
+                                     </p:commandButton>
+                                     <p:commandButton value="Delete">
+                                         <p:ajax event="click" listener="#{listsController.removeItem(item.id)}" process="@all" update="@all"/>
+                                     </p:commandButton>
+                                 </div>
+                             </div>
+                         </p:dataViewListItem>
+                     </p:dataView>
+                     <h:form rendered="#{list.expanded}">
+                         <p:commandButton value="Add new item">
+                             <p:ajax event="click" listener="#{listsController.addItem(list.id)}" process="@all" update="@all"/>
+                         </p:commandButton>
+                     </h:form>
                  </div>
              </h:form>
          </p:dataViewListItem>
      </p:dataView>
     <h:form>
-        <p:commandButton value="Add new">
-            <p:ajax event="click" listener="#{listsController.add}" process="@all" update="@all"/>
+        <p:commandButton value="Add new list">
+            <p:ajax event="click" listener="#{listsController.addList}" process="@all" update="@all"/>
         </p:commandButton>
     </h:form>
 </h:body>
