@@ -1,5 +1,8 @@
 package com.szymonharabasz.grocerylistmanager;
 
+import com.szymonharabasz.grocerylistmanager.domain.GroceryItem;
+import com.szymonharabasz.grocerylistmanager.domain.GroceryList;
+
 import javax.annotation.PostConstruct;
 import javax.ejb.Startup;
 import javax.ejb.Singleton;
@@ -19,8 +22,8 @@ public class Initializer {
         list1.addItem(new GroceryItem(generateID(), "Potatoes", "kg", 1.0f));
         list1.addItem(new GroceryItem(generateID(), "Tomatoes", "kg", 0.5f));
         GroceryList list2 = new GroceryList(generateID(), "Rewe", "Shopping list for Rewe");
-        service.addList(list1);
-        service.addList(list2);
+        service.saveList(list1);
+        service.saveList(list2);
         logger.severe("Loaded lists: " + service.getLists().toString());
     }
     public String generateID() {

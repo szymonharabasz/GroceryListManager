@@ -1,33 +1,40 @@
 package com.szymonharabasz.grocerylistmanager;
 
+import com.szymonharabasz.grocerylistmanager.domain.GroceryItem;
+import com.szymonharabasz.grocerylistmanager.domain.GroceryList;
+import com.szymonharabasz.grocerylistmanager.view.GroceryItemView;
+import com.szymonharabasz.grocerylistmanager.view.GroceryListView;
+import org.omg.CORBA.PRIVATE_MEMBER;
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 @Named
 @ApplicationScoped
 public class ListsController {
     private ListsService service;
     private Date creationDate = new Date();
-
+    private List<GroceryListView> lists = new ArrayList<>();
     private String greeting;
+    private Logger logger = Logger.getLogger(ListsController.class.getName());
+
     @Inject
     public ListsController(ListsService service) {
         this.service = service;
         this.greeting = "Yellow";
+        fetchLists();
     }
 
-    private Logger logger = Logger.getLogger(ListsController.class.getName());
-
-    public List<GroceryList> getLists() {
-        return service.getLists();
+    public List<GroceryListView> getLists() {
+        return lists;
     }
 
-    public void setLists(List<GroceryList> lists) {
-        service.setLists(lists);
+    public void setLists(List<GroceryListView> lists) {
+        this.lists = lists;
     }
 
     public String getGreeting() {
@@ -37,31 +44,36 @@ public class ListsController {
     public void setGreeting(String greeting) { this.greeting = greeting; }
 
     public void editList(String id) {
-        GroceryList list = service.findList(id);
-        list.setEdited(true);
+        findList(id).map(list -> {
+            list.setEdited(true);
+            return list;
+        });
     }
 
     public void saveList(String id) {
-        GroceryList list = service.findList(id);
-        list.setEdited(false);
+        findList(id).map(list -> {
+            list.setEdited(false);
+            service.saveList(list.toGroceryList());
+            return list;
+        });
     }
 
     public void expand(String id) {
-        GroceryList list = service.findList(id);
-        list.setExpanded(true);
+        findList(id).map(list -> {
+            list.setExpanded(true);
+            return list;
+        });
     }
 
     public void collapse(String id) {
-        GroceryList list = service.findList(id);
-        list.setExpanded(false);
+        findList(id).map(list -> {
+            list.setExpanded(false);
+            return list;
+        });
     }
 
     public void removeList(String id) {
         service.removeList(id);
-    }
-
-    public void addList() {
-        service.addList();
     }
 
     public Date getCreationDate() {
@@ -69,13 +81,17 @@ public class ListsController {
     }
 
     public void editItem(String id) {
-        GroceryItem item = service.findItem(id);
-        item.setEdited(true);
+        findItem(id).map(item -> {
+            item.setEdited(true);
+            return item;
+        });
     }
 
     public void saveItem(String id) {
-        GroceryItem item = service.findItem(id);
-        item.setEdited(false);
+        findItem(id).map(item -> {
+            item.setEdited(false);
+            return item;
+        });
     }
 
     public void removeItem(String id) {
@@ -83,8 +99,37 @@ public class ListsController {
         service.removeItem(id);
     }
 
+    public void addList() {
+        GroceryListView list = new GroceryListView(UUID.randomUUID().toString(), "", "");
+        list.setEdited(true);
+        lists.add(list);
+    }
+
     public void addItem(String listId) {
-        System.err.println("Request to add an item");
-        service.addItem(listId);
+        GroceryItemView item = new GroceryItemView(UUID.randomUUID().toString(), "", "", 0.0f);
+        item.setEdited(true);
+        findList(listId).map(list -> {
+            list.addItem(item);
+            service.saveList(list.toGroceryList());
+            return list;
+        });
+        System.err.println("A new item added");
+    }
+
+    private Optional<GroceryListView> findList(String id) {
+        return lists.stream().filter(list -> Objects.equals(list.getId(), id)).findAny();
+    }
+
+    private Optional<GroceryItemView> findItem(String id) {
+        for (GroceryListView list : lists) {
+            for (GroceryItemView item : list.getItems()) {
+                if (Objects.equals(item.getId(), id)) return Optional.of(item);
+            }
+        }
+        return Optional.empty();
+    }
+
+    private void fetchLists() {
+        lists = service.getLists().stream().map(GroceryListView::new).collect(Collectors.toList());
     }
 }

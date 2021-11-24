@@ -1,38 +1,56 @@
 package com.szymonharabasz.grocerylistmanager;
 
+import com.szymonharabasz.grocerylistmanager.domain.GroceryItem;
+import com.szymonharabasz.grocerylistmanager.domain.GroceryList;
+import jakarta.nosql.document.DocumentQuery;
+import jakarta.nosql.mapping.Database;
+import jakarta.nosql.mapping.DatabaseType;
+import jakarta.nosql.mapping.document.DocumentTemplate;
+
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
-import javax.inject.Singleton;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
+import static jakarta.nosql.document.DocumentQuery.select;
 
 @Named
 @ApplicationScoped
 public class ListsService {
-    private List<GroceryList> lists = new ArrayList<>();
+
+    @Inject
+    @Database(DatabaseType.DOCUMENT)
+    private ListsRepository repository;
+
+    @Inject
+    private DocumentTemplate template;
 
     public List<GroceryList> getLists() {
-        return lists;
+        return repository.findAll();
     }
 
     public void setLists(List<GroceryList> lists) {
-        this.lists = lists;
+       // repository.save(lists);
+        template.update(lists);
     }
 
-    public void addList(GroceryList list) {
-        lists.add(list);
+    public void saveList(GroceryList list) {
+       // repository.save(list);
+        template.update(list);
     }
 
-    public GroceryList findList(String id) {
-        for (GroceryList list : lists) if (Objects.equals(list.getId(), id)) return list;
-        return null;
+    public Optional<GroceryList> findList(String id) {
+       // return repository.findById(id);
+        DocumentQuery query = select().from("GroceryList").where("id").eq(id).build();
+        return template.singleResult(query);
     }
 
     public GroceryItem findItem(String id) {
-        for (GroceryList list : lists) {
+        for (GroceryList list : repository.findAll()) {
             for (GroceryItem item : list.getItems()) {
                 if (Objects.equals(item.getId(), id)) return item;
             }
@@ -41,28 +59,16 @@ public class ListsService {
     }
 
     public void removeList(String id) {
-        lists = lists.stream().filter(l -> !Objects.equals(l.getId(), id)).collect(Collectors.toList());
+        repository.deleteById(id);
     }
 
     public void removeItem(String id) {
-        for (GroceryList list : lists) {
+        for (GroceryList list : repository.findAll()) {
             list.setItems(
                     list.getItems().stream().filter(item ->
                             !Objects.equals(item.getId(), id)).collect(Collectors.toList())
             );
+            repository.save(list);
         }
-    }
-
-    public void addList() {
-        GroceryList list = new GroceryList(UUID.randomUUID().toString(), "", "");
-        list.setEdited(true);
-        lists.add(list);
-    }
-
-    public void addItem(String listId) {
-        GroceryItem item = new GroceryItem(UUID.randomUUID().toString(), "", "", 0.0f);
-        item.setEdited(true);
-        findList(listId).addItem(item);
-        System.err.println("A new item added");
     }
 }

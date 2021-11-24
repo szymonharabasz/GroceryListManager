@@ -1,4 +1,8 @@
-package com.szymonharabasz.grocerylistmanager;
+package com.szymonharabasz.grocerylistmanager.domain;
+
+import jakarta.nosql.mapping.Column;
+import jakarta.nosql.mapping.Entity;
+import jakarta.nosql.mapping.Id;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -6,21 +10,25 @@ import java.util.List;
 import java.util.Objects;
 import java.util.logging.Logger;
 
+@Entity("GroceryList")
 public class GroceryList implements Serializable {
+    @Id("id")
     private String id;
+    @Column
     private String name;
+    @Column
     private String description;
+    @Column
     private List<GroceryItem> items = new ArrayList<>();
-    private boolean edited;
-    private boolean expanded;
 
     private Logger logger = Logger.getLogger(GroceryList.class.getName());
+
+    public GroceryList() {}
 
     public GroceryList(String id, String name, String description) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.edited = false;
     }
 
     public String getName() {
@@ -59,24 +67,8 @@ public class GroceryList implements Serializable {
 
     public List<GroceryItem> getItems() { return items; }
 
-    void setItems(List<GroceryItem> items) {
+    public void setItems(List<GroceryItem> items) {
         this.items = items;
-    }
-
-    public void setEdited(boolean edited) {
-        this.edited = edited;
-    }
-
-    public boolean isEdited() {
-        return edited;
-    }
-
-    public boolean isExpanded() {
-        return expanded;
-    }
-
-    public void setExpanded(boolean expanded) {
-        this.expanded = expanded;
     }
 
     @Override
