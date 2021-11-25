@@ -117,6 +117,12 @@ public class ListsController {
     }
 
     private void fetchLists() {
-        lists = service.getLists().stream().map(GroceryListView::new).collect(Collectors.toList());
+        lists = service.getLists().stream().map(list -> {
+            GroceryListView listView = new GroceryListView(list);
+            findList(list.getId()).ifPresent(oldListView -> {
+                listView.setExpanded(oldListView.isExpanded());
+            });
+            return listView;
+        }).collect(Collectors.toList());
     }
 }
