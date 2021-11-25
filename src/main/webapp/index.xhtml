@@ -63,7 +63,7 @@
                                          <p:ajax event="click" listener="#{listsController.editItem(item.id)}" process="@all" update="@all"/>
                                      </p:commandButton>
                                      <p:commandButton rendered="#{item.edited}" value="Save">
-                                         <p:ajax event="click" listener="#{listsController.saveItem(item.id)}" process="@all" update="@all"/>
+                                         <p:ajax event="click" listener="#{listsController.saveItem(item.id, list.id)}" process="@all" update="@all"/>
                                      </p:commandButton>
                                      <p:commandButton value="Delete">
                                          <p:ajax event="click" listener="#{listsController.removeItem(item.id)}" process="@all" update="@all"/>

@@ -9,7 +9,7 @@ import java.util.Objects;
 
 @Entity("GroceryItem")
 public class GroceryItem implements Serializable {
-    @Id("id")
+    @Id
     private String id;
     @Column
     private String name;

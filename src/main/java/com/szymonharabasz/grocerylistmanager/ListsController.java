@@ -74,6 +74,7 @@ public class ListsController {
 
     public void removeList(String id) {
         service.removeList(id);
+        fetchLists();
     }
 
     public Date getCreationDate() {
@@ -87,16 +88,17 @@ public class ListsController {
         });
     }
 
-    public void saveItem(String id) {
+    public void saveItem(String id, String listId) {
         findItem(id).map(item -> {
             item.setEdited(false);
+            service.saveItem(item.toGroceryItem(), listId);
             return item;
         });
     }
 
     public void removeItem(String id) {
-        System.err.println("Request to remove an item");
         service.removeItem(id);
+        fetchLists();
     }
 
     public void addList() {
@@ -113,7 +115,6 @@ public class ListsController {
             service.saveList(list.toGroceryList());
             return list;
         });
-        System.err.println("A new item added");
     }
 
     private Optional<GroceryListView> findList(String id) {

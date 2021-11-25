@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public class GroceryListView implements Serializable {
     private String id;
@@ -28,6 +29,7 @@ public class GroceryListView implements Serializable {
 
     public GroceryListView(GroceryList list) {
         this(list.getId(), list.getName(), list.getDescription());
+        this.items = list.getItems().stream().map(GroceryItemView::new).collect(Collectors.toList());
     }
 
     public GroceryList toGroceryList() {

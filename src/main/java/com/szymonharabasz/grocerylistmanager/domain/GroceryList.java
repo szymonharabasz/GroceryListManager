@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 
 @Entity("GroceryList")
 public class GroceryList implements Serializable {
-    @Id("id")
+    @Id
     private String id;
     @Column
     private String name;
@@ -74,7 +74,8 @@ public class GroceryList implements Serializable {
     @Override
     public String toString() {
         return "GroceryList{" +
-                "name='" + name + '\'' +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 '}';
     }

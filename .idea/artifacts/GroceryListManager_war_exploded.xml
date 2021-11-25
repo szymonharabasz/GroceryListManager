@@ -32,6 +32,8 @@
           <element id="library" level="project" name="Maven: org.mongodb:mongodb-driver-sync:4.2.1" />
           <element id="library" level="project" name="Maven: org.mongodb:bson:4.2.1" />
           <element id="library" level="project" name="Maven: org.mongodb:mongodb-driver-core:4.2.1" />
+          <element id="library" level="project" name="Maven: org.slf4j:slf4j-api:1.7.32" />
+          <element id="library" level="project" name="Maven: org.slf4j:slf4j-simple:1.7.32" />
         </element>
       </element>
       <element id="directory" name="META-INF">

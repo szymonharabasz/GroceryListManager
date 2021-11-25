@@ -11,7 +11,7 @@ import java.util.UUID;
 import java.util.logging.Logger;
 
 @Singleton
-@Startup
+//@Startup
 public class Initializer {
     @Inject
     private ListsService service;
