@@ -37,19 +37,14 @@ public class ListsService {
 
     public void setLists(List<GroceryList> lists) {
         repository.save(lists);
-       // template.update(lists);
     }
 
     public void saveList(GroceryList list) {
         repository.save(list);
-        logger.severe("Attempting to save list " + list);
-       // template.update(list);
     }
 
     public void saveItem(GroceryItem item, String listId) {
-        logger.severe("Trying to save item " + item + " to list of id " + listId);
         findList(listId).ifPresent(list -> {
-            logger.severe("List found " + list);
             AtomicBoolean wasItemFound = new AtomicBoolean(false);
             List<GroceryItem> items = list.getItems().stream().map(i -> {
                 if (Objects.equals(i.getId(), item.getId())) {
@@ -60,7 +55,6 @@ public class ListsService {
                 }
             }).collect(Collectors.toList());
             if (!wasItemFound.get()) {
-                logger.severe("Item wasn't found.");
                 items.add(item);
             }
             list.setItems(items);
@@ -70,21 +64,7 @@ public class ListsService {
 
     public Optional<GroceryList> findList(String id) {
         return repository.findById(id);
-       // DocumentQuery query = select().from("GroceryList").where("id").eq(id).build();
-       // return template.singleResult(query);
     }
-
-    /*
-    public GroceryItem findItem(String id) {
-        for (GroceryList list : repository.findAll()) {
-            for (GroceryItem item : list.getItems()) {
-                if (Objects.equals(item.getId(), id)) return item;
-            }
-        }
-        return null;
-    }
-
-     */
 
     public void removeList(String id) {
         repository.deleteById(id);

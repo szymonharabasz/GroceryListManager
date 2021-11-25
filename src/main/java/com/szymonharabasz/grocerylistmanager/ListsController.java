@@ -44,32 +44,22 @@ public class ListsController {
     public void setGreeting(String greeting) { this.greeting = greeting; }
 
     public void editList(String id) {
-        findList(id).map(list -> {
-            list.setEdited(true);
-            return list;
-        });
+        findList(id).ifPresent(list -> list.setEdited(true));
     }
 
     public void saveList(String id) {
-        findList(id).map(list -> {
+        findList(id).ifPresent(list -> {
             list.setEdited(false);
             service.saveList(list.toGroceryList());
-            return list;
         });
     }
 
     public void expand(String id) {
-        findList(id).map(list -> {
-            list.setExpanded(true);
-            return list;
-        });
+        findList(id).ifPresent(list -> list.setExpanded(true));
     }
 
     public void collapse(String id) {
-        findList(id).map(list -> {
-            list.setExpanded(false);
-            return list;
-        });
+        findList(id).ifPresent(list -> list.setExpanded(false));
     }
 
     public void removeList(String id) {
@@ -82,17 +72,13 @@ public class ListsController {
     }
 
     public void editItem(String id) {
-        findItem(id).map(item -> {
-            item.setEdited(true);
-            return item;
-        });
+        findItem(id).ifPresent(item -> item.setEdited(true));
     }
 
     public void saveItem(String id, String listId) {
-        findItem(id).map(item -> {
+        findItem(id).ifPresent(item -> {
             item.setEdited(false);
             service.saveItem(item.toGroceryItem(), listId);
-            return item;
         });
     }
 
