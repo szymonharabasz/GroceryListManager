@@ -25,21 +25,21 @@
                                  value="#{list.description}"/>
                      </div>
                      <div class="listButtons">
-                         <p:commandButton rendered="#{!list.expanded}" value="Expand">
+                         <p:commandLink rendered="#{!list.expanded}" value="Expand">
                              <p:ajax event="click" listener="#{listsController.expand(list.id)}" process="@all" update="@all"/>
-                         </p:commandButton>
-                         <p:commandButton rendered="#{list.expanded}" value="Collapse">
+                         </p:commandLink>
+                         <p:commandLink rendered="#{list.expanded}" value="Collapse">
                              <p:ajax event="click" listener="#{listsController.collapse(list.id)}" process="@all" update="@all"/>
-                         </p:commandButton>
-                         <p:commandButton rendered="#{!list.edited}" value="Edit #{status.index}" label="btnEdit#{list.id}">
+                         </p:commandLink>
+                         <p:commandLink rendered="#{!list.edited}" value="Edit #{status.index}" label="btnEdit#{list.id}">
                             <p:ajax event="click" listener="#{listsController.editList(list.id)}" process="@all" update="@all"/>
-                         </p:commandButton>
-                         <p:commandButton rendered="#{list.edited}" value="Save">
+                         </p:commandLink>
+                         <p:commandLink rendered="#{list.edited}" value="Save">
                             <p:ajax event="click" listener="#{listsController.saveList(list.id)}" process="@all" update="@all"/>
-                         </p:commandButton>
-                         <p:commandButton value="Delete">
+                         </p:commandLink>
+                         <p:commandLink value="Delete">
                              <p:ajax event="click" listener="#{listsController.removeList(list.id)}" process="@all" update="@all"/>
-                         </p:commandButton>
+                         </p:commandLink>
                      </div>
                  </div>
                  <div>
@@ -59,30 +59,30 @@
                                     <p:inputText value="#{item.unit}" rendered="#{item.edited}"/>
                                 </div>
                                  <div class="itemButton">
-                                     <p:commandButton rendered="#{!item.edited}" value="Edit">
+                                     <p:commandLink rendered="#{!item.edited}" value="Edit">
                                          <p:ajax event="click" listener="#{listsController.editItem(item.id)}" process="@all" update="@all"/>
-                                     </p:commandButton>
-                                     <p:commandButton rendered="#{item.edited}" value="Save">
+                                     </p:commandLink>
+                                     <p:commandLink rendered="#{item.edited}" value="Save">
                                          <p:ajax event="click" listener="#{listsController.saveItem(item.id, list.id)}" process="@all" update="@all"/>
-                                     </p:commandButton>
-                                     <p:commandButton value="Delete">
+                                     </p:commandLink>
+                                     <p:commandLink value="Delete">
                                          <p:ajax event="click" listener="#{listsController.removeItem(item.id)}" process="@all" update="@all"/>
-                                     </p:commandButton>
+                                     </p:commandLink>
                                  </div>
                              </div>
                          </p:dataViewListItem>
                      </p:dataView>
-                     <p:commandButton value="Add new item" rendered="#{list.expanded}">
+                     <p:commandLink value="Add new item" rendered="#{list.expanded}">
                          <p:ajax event="click" listener="#{listsController.addItem(list.id)}" process="@all" update="@all"/>
-                     </p:commandButton>
+                     </p:commandLink>
                  </div>
              </h:form>
          </p:dataViewListItem>
      </p:dataView>
     <h:form>
-        <p:commandButton value="Add new list">
+        <p:commandLink value="Add new list">
             <p:ajax event="click" listener="#{listsController.addList}" process="@all" update="@all"/>
-        </p:commandButton>
+        </p:commandLink>
     </h:form>
 </h:body>
 </html>
