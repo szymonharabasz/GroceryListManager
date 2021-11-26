@@ -1,4 +1,4 @@
-package com.szymonharabasz.grocerylistmanager;
+package com.szymonharabasz.grocerylistmanager.domain;
 
 import com.szymonharabasz.grocerylistmanager.domain.GroceryList;
 import jakarta.nosql.mapping.Repository;

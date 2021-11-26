@@ -1,7 +1,8 @@
-package com.szymonharabasz.grocerylistmanager;
+package com.szymonharabasz.grocerylistmanager.service;
 
 import com.szymonharabasz.grocerylistmanager.domain.GroceryItem;
 import com.szymonharabasz.grocerylistmanager.domain.GroceryList;
+import com.szymonharabasz.grocerylistmanager.domain.ListsRepository;
 import jakarta.nosql.mapping.Database;
 import jakarta.nosql.mapping.DatabaseType;
 import jakarta.nosql.mapping.document.DocumentTemplate;

@@ -1,10 +1,8 @@
 package com.szymonharabasz.grocerylistmanager;
 
-import com.szymonharabasz.grocerylistmanager.domain.GroceryItem;
-import com.szymonharabasz.grocerylistmanager.domain.GroceryList;
+import com.szymonharabasz.grocerylistmanager.service.ListsService;
 import com.szymonharabasz.grocerylistmanager.view.GroceryItemView;
 import com.szymonharabasz.grocerylistmanager.view.GroceryListView;
-import org.omg.CORBA.PRIVATE_MEMBER;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -121,6 +119,7 @@ public class ListsController {
             GroceryListView listView = new GroceryListView(list);
             findList(list.getId()).ifPresent(oldListView -> {
                 listView.setExpanded(oldListView.isExpanded());
+                listView.setEdited(oldListView.isEdited());
             });
             return listView;
         }).collect(Collectors.toList());
