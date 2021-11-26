@@ -16,6 +16,7 @@
         </element>
         <element id="directory" name="lib">
           <element id="library" level="project" name="Maven: org.primefaces:primefaces:10.0.0" />
+          <element id="library" level="project" name="Maven: org.webjars.npm:primeflex:2.0.0" />
           <element id="file-copy" path="$MAVEN_REPOSITORY$/org/eclipse/jnosql/mapping/mapping-document/1.0.0-b3/mapping-document-1.0.0-b3.jar" output-file-name="org.eclipse.jnosql.mapping-mapping-document-1.0.0-b3.jar" />
           <element id="file-copy" path="$MAVEN_REPOSITORY$/org/eclipse/jnosql/communication/communication-document/1.0.0-b3/communication-document-1.0.0-b3.jar" output-file-name="org.eclipse.jnosql.communication-communication-document-1.0.0-b3.jar" />
           <element id="file-copy" path="$MAVEN_REPOSITORY$/org/eclipse/jnosql/communication/communication-core/1.0.0-b3/communication-core-1.0.0-b3.jar" output-file-name="org.eclipse.jnosql.communication-communication-core-1.0.0-b3.jar" />

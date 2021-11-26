@@ -4,8 +4,40 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
-<f:view>
-    <h:outputLabel value="Hello, world"/>
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<f:view transient="true">
+<h:head>
+    <title>Login to Grocery List Manager</title>
+    <h:outputStylesheet library="webjars" name="primeflex/2.0.0/primeflex.min.css" />
+    <h:outputStylesheet library="css" name="login.css?#{listsController.creationDate}"/>
+</h:head>
+<h:body>
+    <p:outputPanel>
+        <div class="ui-g">
+            <div class="ui-g-4"/>
+            <div class="ui-g-4">
+                <h3>Login</h3>
+                <h:form>
+                    <p:messages id="messages" globalOnly="true"/>
+                    <p:panelGrid columns="2" layout="grid"
+                                 columnClasses="p-col-6 p-md-6 p-xl-6, p-col-6 p-md-6 p-xl-6"
+                                 styleClass="customPanelGrid">
+                        <p:outputLabel for="textLogin" value="User name"/>
+                        <p:inputText id="textLogin" value="#{loginBacking.username}"/>
+                        <p:outputLabel for="textPassword" value="Password"/>
+                        <p:password id="textPassword" value="#{loginBacking.password}"/>
+                        <p:row>
+                            <p:column styleClass="p-col-12 p-md-12 p-xl-12">
+                                <p:commandButton value="Sign up" styleClass="p-mr-2 ui-button-outlined" style="width: auto"/>
+                                <p:commandButton ajax="false" value="Sign in" update="@form" styleClass="p-mr-2" style="width: auto" action="#{loginBacking.handleLogin}"/>
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>
+                </h:form>
+            </div>
+        </div>
+    </p:outputPanel>
+</h:body>
 </f:view>
 </html>

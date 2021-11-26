@@ -10,7 +10,8 @@
 </h:head>
 <h:body>
     <h:form>
-        <p:button action="login" value="Login"/>
+        <p>Logged-in as #{request.userPrincipal.name}</p>
+        <p:commandButton ajax="false" action="#{logoutBacking.handleLogout}" value="Logout"/>
     </h:form>
     <p:dataView value="#{listsController.lists}" var="list" varStatus="status" layout="list">
         <p:dataViewListItem>

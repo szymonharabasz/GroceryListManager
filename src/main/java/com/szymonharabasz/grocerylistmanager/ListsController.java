@@ -124,4 +124,8 @@ public class ListsController {
             return listView;
         }).collect(Collectors.toList());
     }
+
+    private String goToLogin() {
+        return "login";
+    }
 }
