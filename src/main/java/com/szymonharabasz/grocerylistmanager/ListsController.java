@@ -6,14 +6,12 @@ import com.szymonharabasz.grocerylistmanager.service.UserService;
 import com.szymonharabasz.grocerylistmanager.view.GroceryItemView;
 import com.szymonharabasz.grocerylistmanager.view.GroceryListView;
 
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.security.enterprise.SecurityContext;
 import java.io.Serializable;
+import java.security.Principal;
 import java.util.*;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -21,7 +19,7 @@ import java.util.stream.Collectors;
 @Named
 @SessionScoped
 public class ListsController implements Serializable {
-    private final ListsService service;
+    private final ListsService listsService;
     private final UserService userService;
     @Inject
     private SecurityContext securityContext;
@@ -32,13 +30,12 @@ public class ListsController implements Serializable {
 
     @Inject
     public ListsController(ListsService listsService, UserService userService) {
-        this.service = listsService;
+        this.listsService = listsService;
         this.userService = userService;
         this.greeting = "Yellow";
     }
 
     public List<GroceryListView> getLists() {
-        fetchLists();
         return lists;
     }
 
@@ -59,7 +56,7 @@ public class ListsController implements Serializable {
     public void saveList(String id) {
         findList(id).ifPresent(list -> {
             list.setEdited(false);
-            service.saveList(list.toGroceryList());
+            listsService.saveList(list.toGroceryList());
         });
     }
 
@@ -72,7 +69,7 @@ public class ListsController implements Serializable {
     }
 
     public void removeList(String id) {
-        service.removeList(id);
+        listsService.removeList(id);
         fetchLists();
     }
 
@@ -87,19 +84,30 @@ public class ListsController implements Serializable {
     public void saveItem(String id, String listId) {
         findItem(id).ifPresent(item -> {
             item.setEdited(false);
-            service.saveItem(item.toGroceryItem(), listId);
+            listsService.saveItem(item.toGroceryItem(), listId);
         });
     }
 
     public void removeItem(String id) {
-        service.removeItem(id);
-        fetchLists();
+        currenUser().ifPresent(user -> {
+            user.removeListId(id);
+            userService.save(user);
+            listsService.removeItem(id);
+            fetchLists();
+        });
     }
 
     public void addList() {
-        GroceryListView list = new GroceryListView(UUID.randomUUID().toString(), "", "");
-        list.setEdited(true);
-        lists.add(list);
+        System.err.println("Adding new list for user " + securityContext.getCallerPrincipal().getName());
+        currenUser().ifPresent(user -> {;
+            System.err.println("Adding new list for user " + user.getName());
+            GroceryListView list = new GroceryListView(UUID.randomUUID().toString(), "", "");
+            user.addListId(list.getId());
+            userService.save(user);
+            list.setEdited(true);
+            lists.add(list);
+            listsService.saveList(list.toGroceryList());
+        });
     }
 
     public void addItem(String listId) {
@@ -107,7 +115,7 @@ public class ListsController implements Serializable {
         item.setEdited(true);
         findList(listId).map(list -> {
             list.addItem(item);
-            service.saveList(list.toGroceryList());
+            listsService.saveList(list.toGroceryList());
             return list;
         });
     }
@@ -125,10 +133,10 @@ public class ListsController implements Serializable {
         return Optional.empty();
     }
 
-    private void fetchLists() {
-        String principalName = securityContext.getCallerPrincipal().getName();
-        userService.findUser(principalName).ifPresent(user -> {
-            lists = service.getLists().stream()
+    public void fetchLists() {
+        logger.warning("Lists are fetched.");
+        currenUser().ifPresent(user -> {
+            lists = listsService.getLists().stream()
                     .filter(list -> user.hasListId(list.getId()))
                     .map(list -> {
                         GroceryListView listView = new GroceryListView(list);
@@ -141,7 +149,13 @@ public class ListsController implements Serializable {
         });
     }
 
-    private String goToLogin() {
-        return "login";
+    Optional<User> currenUser() {
+        if (securityContext != null) {
+            Principal caller = securityContext.getCallerPrincipal();
+            return userService.findUser(caller.getName());
+        } else {
+            return Optional.empty();
+        }
     }
+
 }
