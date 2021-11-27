@@ -41,6 +41,8 @@ public class ListsService {
     }
 
     public void saveList(GroceryList list) {
+        logger.severe("Saving list " + list.getName() + " with " + list.getItems().size() + " items.");
+        logger.severe(list.toString());
         repository.save(list);
     }
 

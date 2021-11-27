@@ -8,7 +8,7 @@
       xmlns:p="http://primefaces.org/ui">
 <f:view transient="true">
 <h:head>
-    <title>Login to Grocery List Manager</title>
+    <title>Register a new user</title>
     <h:outputStylesheet library="webjars" name="primeflex/2.0.0/primeflex.min.css" />
     <h:outputStylesheet library="css" name="login.css?#{listsController.creationDate}"/>
 </h:head>
@@ -17,20 +17,26 @@
         <div class="ui-g">
             <div class="ui-g-4"/>
             <div class="ui-g-4">
-                <h3>Login</h3>
+                <h3>Register a new user</h3>
                 <h:form>
                     <p:messages id="messages" globalOnly="true"/>
                     <p:panelGrid columns="2" layout="grid"
                                  columnClasses="p-col-6 p-md-6 p-xl-6, p-col-6 p-md-6 p-xl-6"
                                  styleClass="customPanelGrid">
                         <p:outputLabel for="textLogin" value="User name"/>
-                        <p:inputText id="textLogin" value="#{loginBacking.username}"/>
+                        <p:inputText id="textLogin" value="#{registerBacking.username}"/>
                         <p:outputLabel for="textPassword" value="Password"/>
-                        <p:password id="textPassword" value="#{loginBacking.password}"/>
+                        <p:password id="textPassword" value="#{registerBacking.password}"/>
+                        <p:outputLabel for="textRepeatPassword" value="Repeat password"/>
+                        <p:password id="textRepeatPassword" value="#{registerBacking.repeatPassword}"/>
+                        <p:outputLabel for="textEmail" value="E-mail"/>
+                        <p:inputText id="textEmail" value="#{registerBacking.email}">
+
+                        </p:inputText>
                         <p:row>
                             <p:column styleClass="p-col-12 p-md-12 p-xl-12">
-                                <p:commandButton ajax="false" value="Sign up" styleClass="p-mr-2 ui-button-outlined" style="width: auto" action="register"/>
-                                <p:commandButton ajax="false" value="Sign in" update="@form" styleClass="p-mr-2" style="width: auto" action="#{loginBacking.handleLogin}"/>
+                                <p:commandButton ajax="false" value="Sign up" update="@form" styleClass="p-mr-2"
+                                                 style="width: auto" action="#{registerBacking.register}"/>
                             </p:column>
                         </p:row>
                     </p:panelGrid>

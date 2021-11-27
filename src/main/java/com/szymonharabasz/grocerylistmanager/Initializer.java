@@ -14,6 +14,8 @@ import javax.inject.Inject;
 import java.util.UUID;
 import java.util.logging.Logger;
 
+import static com.szymonharabasz.grocerylistmanager.Utils.generateID;
+
 @Singleton
 //@Startup
 public class Initializer {
@@ -35,8 +37,5 @@ public class Initializer {
         user1.addListId(listId1);
         userService.save(user1);
         logger.severe("Loaded lists: " + listsService.getLists().toString());
-    }
-    public String generateID() {
-        return UUID.randomUUID().toString();
     }
 }

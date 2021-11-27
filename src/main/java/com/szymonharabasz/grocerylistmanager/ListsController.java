@@ -1,5 +1,7 @@
 package com.szymonharabasz.grocerylistmanager;
 
+import com.codepoetics.protonpack.StreamUtils;
+import com.szymonharabasz.grocerylistmanager.domain.GroceryList;
 import com.szymonharabasz.grocerylistmanager.domain.User;
 import com.szymonharabasz.grocerylistmanager.service.ListsService;
 import com.szymonharabasz.grocerylistmanager.service.UserService;
@@ -113,10 +115,13 @@ public class ListsController implements Serializable {
     public void addItem(String listId) {
         GroceryItemView item = new GroceryItemView(UUID.randomUUID().toString(), "", "", 0.0f);
         item.setEdited(true);
-        findList(listId).map(list -> {
+        findList(listId).ifPresent(list -> {
+            logger.severe("Adding item to list " + list.getName());
             list.addItem(item);
-            listsService.saveList(list.toGroceryList());
-            return list;
+            GroceryList groceryList = list.toGroceryList();
+            logger.severe("List view has " + list.getItems().size() + ", list has " + groceryList.getItems().size() + " items.");
+            logger.severe(groceryList.toString());
+            listsService.saveList(groceryList);
         });
     }
 
@@ -143,6 +148,14 @@ public class ListsController implements Serializable {
                         findList(list.getId()).ifPresent(oldListView -> {
                             listView.setExpanded(oldListView.isExpanded());
                             listView.setEdited(oldListView.isEdited());
+                            listView.setItems(StreamUtils.zip(
+                                    oldListView.getItems().stream(),
+                                    listView.getItems().stream(),
+                                    (oldItemView, newItemView) -> {
+                                        newItemView.setEdited(oldItemView.isEdited());
+                                        return newItemView;
+                                    }
+                            ).collect(Collectors.toList()));
                         });
                         return listView;
                     }).collect(Collectors.toList());

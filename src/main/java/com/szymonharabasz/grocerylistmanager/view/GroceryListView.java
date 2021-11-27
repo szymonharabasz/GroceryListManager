@@ -33,7 +33,10 @@ public class GroceryListView implements Serializable {
     }
 
     public GroceryList toGroceryList() {
-        return new GroceryList(id, name, description);
+        GroceryList groceryList = new GroceryList(id, name, description);
+        groceryList.setItems(items.stream()
+                .map(groceryItemView -> groceryItemView.toGroceryItem()).collect(Collectors.toList()));
+        return groceryList;
     }
 
     public String getName() {
@@ -72,7 +75,7 @@ public class GroceryListView implements Serializable {
 
     public List<GroceryItemView> getItems() { return items; }
 
-    void setItems(List<GroceryItemView> items) {
+    public void setItems(List<GroceryItemView> items) {
         this.items = items;
     }
 
