@@ -5,3 +5,11 @@
 .ui-commandlink {
     margin-right: 1em;
 }
+
+.ui-panelgrid.showcase-text-align-center .ui-grid-responsive .ui-panelgrid-cell {
+    text-align: center;
+}
+
+.customPanelGrid .ui-panelgrid-content {
+    align-items: center;
+}
