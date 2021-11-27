@@ -8,6 +8,7 @@ import jakarta.nosql.mapping.DatabaseType;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.util.Optional;
 
 @Named
 @ApplicationScoped
@@ -19,5 +20,9 @@ public class UserService {
 
     public void save(User user) {
         repository.save(user);
+    }
+
+    public Optional<User> findUser(String name) {
+        return repository.findByName(name);
     }
 }

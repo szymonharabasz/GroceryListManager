@@ -1,33 +1,44 @@
 package com.szymonharabasz.grocerylistmanager;
 
+import com.szymonharabasz.grocerylistmanager.domain.User;
 import com.szymonharabasz.grocerylistmanager.service.ListsService;
+import com.szymonharabasz.grocerylistmanager.service.UserService;
 import com.szymonharabasz.grocerylistmanager.view.GroceryItemView;
 import com.szymonharabasz.grocerylistmanager.view.GroceryListView;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.security.enterprise.SecurityContext;
+import java.io.Serializable;
 import java.util.*;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @Named
-@ApplicationScoped
-public class ListsController {
-    private ListsService service;
+@SessionScoped
+public class ListsController implements Serializable {
+    private final ListsService service;
+    private final UserService userService;
+    @Inject
+    private SecurityContext securityContext;
     private Date creationDate = new Date();
     private List<GroceryListView> lists = new ArrayList<>();
     private String greeting;
     private Logger logger = Logger.getLogger(ListsController.class.getName());
 
     @Inject
-    public ListsController(ListsService service) {
-        this.service = service;
+    public ListsController(ListsService listsService, UserService userService) {
+        this.service = listsService;
+        this.userService = userService;
         this.greeting = "Yellow";
-        fetchLists();
     }
 
     public List<GroceryListView> getLists() {
+        fetchLists();
         return lists;
     }
 
@@ -115,14 +126,19 @@ public class ListsController {
     }
 
     private void fetchLists() {
-        lists = service.getLists().stream().map(list -> {
-            GroceryListView listView = new GroceryListView(list);
-            findList(list.getId()).ifPresent(oldListView -> {
-                listView.setExpanded(oldListView.isExpanded());
-                listView.setEdited(oldListView.isEdited());
-            });
-            return listView;
-        }).collect(Collectors.toList());
+        String principalName = securityContext.getCallerPrincipal().getName();
+        userService.findUser(principalName).ifPresent(user -> {
+            lists = service.getLists().stream()
+                    .filter(list -> user.hasListId(list.getId()))
+                    .map(list -> {
+                        GroceryListView listView = new GroceryListView(list);
+                        findList(list.getId()).ifPresent(oldListView -> {
+                            listView.setExpanded(oldListView.isExpanded());
+                            listView.setEdited(oldListView.isEdited());
+                        });
+                        return listView;
+                    }).collect(Collectors.toList());
+        });
     }
 
     private String goToLogin() {

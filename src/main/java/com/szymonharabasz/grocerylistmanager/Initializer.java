@@ -9,12 +9,13 @@ import com.szymonharabasz.grocerylistmanager.service.UserService;
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
+import javax.enterprise.inject.Vetoed;
 import javax.inject.Inject;
 import java.util.UUID;
 import java.util.logging.Logger;
 
 @Singleton
-@Startup
+//@Startup
 public class Initializer {
     @Inject
     private ListsService listsService;

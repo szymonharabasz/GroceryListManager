@@ -1,8 +1,10 @@
 package com.szymonharabasz.grocerylistmanager;
 
+import com.szymonharabasz.grocerylistmanager.service.UserService;
+
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Vetoed;
+import javax.inject.Inject;
 import javax.inject.Named;
 import javax.security.enterprise.credential.Credential;
 import javax.security.enterprise.credential.UsernamePasswordCredential;
@@ -14,9 +16,11 @@ import java.util.Set;
 
 @Named
 @ApplicationScoped
-@Vetoed
-public class InMemoryIdentityStore implements IdentityStore {
+public class MongoIdentityStore implements IdentityStore {
     private Set<String> userAdminRoleSet;
+
+    @Inject
+    UserService userService;
 
     @PostConstruct
     void init() {
@@ -27,12 +31,15 @@ public class InMemoryIdentityStore implements IdentityStore {
     public CredentialValidationResult validate(Credential credential) {
         System.err.println("!!!!!!!! CALLING VALIDATE !!!!!!!!");
         UsernamePasswordCredential usernamePasswordCredential = (UsernamePasswordCredential) credential;
-        CredentialValidationResult credentialValidationResult;
-        if (usernamePasswordCredential.compareTo("Carl", "pwd")) {
-            credentialValidationResult = new CredentialValidationResult("Carl", userAdminRoleSet);
-        } else {
-            credentialValidationResult = CredentialValidationResult.NOT_VALIDATED_RESULT;
-        }
+        CredentialValidationResult credentialValidationResult = userService.findUser(usernamePasswordCredential.getCaller()).map(user -> {
+            CredentialValidationResult result;
+            if (usernamePasswordCredential.compareTo(user.getName(), user.getPassword())) {
+                result = new CredentialValidationResult(user.getName(), userAdminRoleSet);
+            } else {
+                result = CredentialValidationResult.NOT_VALIDATED_RESULT;
+            }
+            return result;
+        }).orElse(CredentialValidationResult.NOT_VALIDATED_RESULT);
         System.err.println("Credentials validation result " + credentialValidationResult.getStatus());
         return credentialValidationResult;
     }
