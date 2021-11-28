@@ -26,15 +26,23 @@
                         <p:outputLabel styleClass="ui-g-12" style="width: auto" for="textLogin" value="User name"/>
                         <p:inputText styleClass="ui-g-12" id="textLogin" value="#{registerBacking.username}"/>
                         <p:message for="@previous"/>
-                        <p:outputLabel styleClass="ui-g-12" style="width: auto" for="textPassword" value="Password"/>
-                        <p:password styleClass="ui-g-12" id="textPassword" value="#{registerBacking.password}" match="textRepeatPassword"/>
-                        <p:message for="@previous"/>
-                        <p:outputLabel styleClass="ui-g-12" style="width: auto" for="textRepeatPassword" value="Repeat password"/>
-                        <p:password styleClass="ui-g-12" id="textRepeatPassword" value="#{registerBacking.password}"/>
-                        <p:message for="@previous"/>
                         <p:outputLabel styleClass="ui-g-12" style="width: auto" for="textEmail" value="E-mail"/>
                         <p:inputText styleClass="ui-g-12" id="textEmail" value="#{registerBacking.email}"/>
                         <p:message for="@previous"/>
+                        <p:outputLabel styleClass="ui-g-12" style="width: auto" for="textPassword" value="Password"/>
+                        <p:password styleClass="ui-g-12" id="textPassword" value="#{registerBacking.password}"
+                                    match="textRepeatPassword" toggleMask="true" label="password"/>
+                        <p:message for="@previous"/>
+                        <p:outputLabel styleClass="ui-g-12" style="width: auto" for="textRepeatPassword" value="Repeat password"/>
+                        <p:password styleClass="ui-g-12" id="textRepeatPassword" value="#{registerBacking.password}"
+                                    toggleMask="true" label="repeated password"/>
+                        <p:message for="@previous"/>
+                        <p:row>
+                            <p:column styleClass="p-col-12 p-md-12 p-xl-12">
+                                <p:captcha label="Captcha" validatorMessage="captcha test must be passed"/>
+                                <p:message for="@previous"/>
+                            </p:column>
+                        </p:row>
                         <p:row>
                             <p:column styleClass="p-col-12 p-md-12 p-xl-12">
                                 <p:commandButton ajax="false" validateClient="true" value="Sign up" update="@form" styleClass="p-mr-2"

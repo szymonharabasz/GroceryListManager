@@ -15,9 +15,7 @@ import javax.security.enterprise.authentication.mechanism.http.AuthenticationPar
 import javax.security.enterprise.credential.UsernamePasswordCredential;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 import java.io.IOException;
 
 @Named
@@ -27,17 +25,15 @@ public class RegisterBacking {
     @Inject
     private UserService userService;
 
-    @NotNull
-    @NotEmpty
+    @NotBlank
+    @Size(min = 4, max = 20)
     private String username;
 
-    @NotNull
-    @NotEmpty
+    @NotBlank
     private String password;
-    @NotNull
-    @NotEmpty
+    @NotBlank
     private String repeatPassword;
-    @NotNull
+    @NotBlank
     @Email
     private String email;
 
