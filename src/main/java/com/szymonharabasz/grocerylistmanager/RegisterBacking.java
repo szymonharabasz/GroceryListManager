@@ -2,6 +2,8 @@ package com.szymonharabasz.grocerylistmanager;
 
 import com.szymonharabasz.grocerylistmanager.domain.User;
 import com.szymonharabasz.grocerylistmanager.service.UserService;
+import com.szymonharabasz.grocerylistmanager.validation.Alphanumeric;
+import com.szymonharabasz.grocerylistmanager.validation.Password;
 
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
@@ -26,12 +28,15 @@ public class RegisterBacking {
     private UserService userService;
 
     @NotBlank
+    @Alphanumeric
     @Size(min = 4, max = 20)
     private String username;
 
     @NotBlank
+    @Password
     private String password;
     @NotBlank
+    @Password
     private String repeatPassword;
     @NotBlank
     @Email
