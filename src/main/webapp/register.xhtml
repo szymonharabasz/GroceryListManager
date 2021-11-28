@@ -15,27 +15,29 @@
 <h:body>
     <p:outputPanel>
         <div class="ui-g">
-            <div class="ui-g-4"/>
-            <div class="ui-g-4">
+            <div class="ui-g-2"/>
+            <div class="ui-g-7">
                 <h3>Register a new user</h3>
                 <h:form>
                     <p:messages id="messages" globalOnly="true"/>
-                    <p:panelGrid columns="2" layout="grid"
-                                 columnClasses="p-col-6 p-md-6 p-xl-6, p-col-6 p-md-6 p-xl-6"
+                    <p:panelGrid columns="3" layout="grid"
+                                 columnClasses="p-col-3 p-md-3 p-xl-3, p-col-5 p-md-5 p-xl-5, p-col-4 p-md-4 p-xl-4"
                                  styleClass="customPanelGrid">
-                        <p:outputLabel for="textLogin" value="User name"/>
-                        <p:inputText id="textLogin" value="#{registerBacking.username}"/>
-                        <p:outputLabel for="textPassword" value="Password"/>
-                        <p:password id="textPassword" value="#{registerBacking.password}"/>
-                        <p:outputLabel for="textRepeatPassword" value="Repeat password"/>
-                        <p:password id="textRepeatPassword" value="#{registerBacking.repeatPassword}"/>
-                        <p:outputLabel for="textEmail" value="E-mail"/>
-                        <p:inputText id="textEmail" value="#{registerBacking.email}">
-
-                        </p:inputText>
+                        <p:outputLabel styleClass="ui-g-12" style="width: auto" for="textLogin" value="User name"/>
+                        <p:inputText styleClass="ui-g-12" id="textLogin" value="#{registerBacking.username}"/>
+                        <p:message for="@previous"/>
+                        <p:outputLabel styleClass="ui-g-12" style="width: auto" for="textPassword" value="Password"/>
+                        <p:password styleClass="ui-g-12" id="textPassword" value="#{registerBacking.password}" match="textRepeatPassword"/>
+                        <p:message for="@previous"/>
+                        <p:outputLabel styleClass="ui-g-12" style="width: auto" for="textRepeatPassword" value="Repeat password"/>
+                        <p:password styleClass="ui-g-12" id="textRepeatPassword" value="#{registerBacking.password}"/>
+                        <p:message for="@previous"/>
+                        <p:outputLabel styleClass="ui-g-12" style="width: auto" for="textEmail" value="E-mail"/>
+                        <p:inputText styleClass="ui-g-12" id="textEmail" value="#{registerBacking.email}"/>
+                        <p:message for="@previous"/>
                         <p:row>
                             <p:column styleClass="p-col-12 p-md-12 p-xl-12">
-                                <p:commandButton ajax="false" value="Sign up" update="@form" styleClass="p-mr-2"
+                                <p:commandButton ajax="false" validateClient="true" value="Sign up" update="@form" styleClass="p-mr-2"
                                                  style="width: auto" action="#{registerBacking.register}"/>
                             </p:column>
                         </p:row>

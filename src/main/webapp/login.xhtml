@@ -21,12 +21,12 @@
                 <h:form>
                     <p:messages id="messages" globalOnly="true"/>
                     <p:panelGrid columns="2" layout="grid"
-                                 columnClasses="p-col-6 p-md-6 p-xl-6, p-col-6 p-md-6 p-xl-6"
+                                 columnClasses="p-col-4 p-md-4 p-xl-4, p-col-5 p-md-5 p-xl-5"
                                  styleClass="customPanelGrid">
-                        <p:outputLabel for="textLogin" value="User name"/>
-                        <p:inputText id="textLogin" value="#{loginBacking.username}"/>
-                        <p:outputLabel for="textPassword" value="Password"/>
-                        <p:password id="textPassword" value="#{loginBacking.password}"/>
+                        <p:outputLabel styleClass="ui-g-12" style="width: auto" for="textLogin" value="User name"/>
+                        <p:inputText styleClass="ui-g-12" style="width: auto" id="textLogin" value="#{loginBacking.username}"/>
+                        <p:outputLabel styleClass="ui-g-12" style="width: auto" for="textPassword" value="Password"/>
+                        <p:password styleClass="ui-g-12" style="width: auto" id="textPassword" value="#{loginBacking.password}"/>
                         <p:row>
                             <p:column styleClass="p-col-12 p-md-12 p-xl-12">
                                 <p:commandButton ajax="false" value="Sign up" styleClass="p-mr-2 ui-button-outlined" style="width: auto" action="register"/>
