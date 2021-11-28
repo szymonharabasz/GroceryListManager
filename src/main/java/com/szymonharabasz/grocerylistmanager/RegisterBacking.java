@@ -1,9 +1,11 @@
 package com.szymonharabasz.grocerylistmanager;
 
 import com.szymonharabasz.grocerylistmanager.domain.User;
+import com.szymonharabasz.grocerylistmanager.service.ConfirmationMailService;
 import com.szymonharabasz.grocerylistmanager.service.UserService;
 import com.szymonharabasz.grocerylistmanager.validation.Alphanumeric;
 import com.szymonharabasz.grocerylistmanager.validation.Password;
+import org.apache.commons.lang3.RandomStringUtils;
 
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
@@ -11,6 +13,7 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.mail.MessagingException;
 import javax.security.enterprise.AuthenticationStatus;
 import javax.security.enterprise.SecurityContext;
 import javax.security.enterprise.authentication.mechanism.http.AuthenticationParameters;
@@ -26,6 +29,9 @@ public class RegisterBacking {
 
     @Inject
     private UserService userService;
+
+    @Inject
+    private ConfirmationMailService confirmationMailService;
 
     @NotBlank
     @Alphanumeric
@@ -74,7 +80,10 @@ public class RegisterBacking {
         this.email = email;
     }
 
-    public void register() {
-        userService.save(new User(Utils.generateID(), username, password, email));
+    public void register() throws MessagingException {
+        User user = new User(Utils.generateID(), username, password, email);
+        user.setConfirmationToken(RandomStringUtils.randomAlphanumeric(32));
+        userService.save(user);
+        confirmationMailService.sendEmail(user);
     }
 }

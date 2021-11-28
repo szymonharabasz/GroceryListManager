@@ -165,7 +165,7 @@ public class ListsController implements Serializable {
     Optional<User> currenUser() {
         if (securityContext != null) {
             Principal caller = securityContext.getCallerPrincipal();
-            return userService.findUser(caller.getName());
+            return userService.findByName(caller.getName());
         } else {
             return Optional.empty();
         }

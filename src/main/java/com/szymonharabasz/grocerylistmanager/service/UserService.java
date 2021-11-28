@@ -22,7 +22,9 @@ public class UserService {
         repository.save(user);
     }
 
-    public Optional<User> findUser(String name) {
+    public Optional<User> findByName(String name) {
         return repository.findByName(name);
     }
+
+    public Optional<User> findByConfirmationToken(String token) { return repository.findByConfirmationToken(token); }
 }
