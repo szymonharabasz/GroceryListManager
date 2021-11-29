@@ -1,5 +1,7 @@
 package com.szymonharabasz.grocerylistmanager;
 
+import com.szymonharabasz.grocerylistmanager.service.UserService;
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
@@ -28,6 +30,9 @@ public class LoginBacking {
 
     @Inject
     private ExternalContext externalContext;
+
+    @Inject
+    private UserService userService;
 
     private String username;
     private String password;
@@ -66,9 +71,25 @@ public class LoginBacking {
                                 "Wrong user name or password", null));
                 break;
             case SUCCESS:
-                facesContext.addMessage(null,
-                        new FacesMessage(FacesMessage.SEVERITY_INFO, "Login succeeded", null));
-                externalContext.redirect(externalContext.getRequestContextPath() + "/index.xhtml");
+                userService.findByName(username).ifPresent(user -> {
+                    if (user.isConfirmed()) {
+                        facesContext.addMessage(null,
+                                new FacesMessage(FacesMessage.SEVERITY_INFO, "Login succeeded", null));
+                        try {
+                            externalContext.redirect(externalContext.getRequestContextPath() + "/index.xhtml");
+                        } catch (IOException e) {
+                            facesContext.addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                                    "An error has occured when redirecting to the home page.", null));
+
+                        }
+                    } else {
+                        facesContext.addMessage(null,
+                                new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                                        "Your e-mail address is not confirmed. Check your mailbox " +
+                                                "to find a confirmation link.", null));
+
+                    }
+                });
                 break;
             case NOT_DONE:
         }
