@@ -30,7 +30,7 @@ public class ConfirmationEmailBacking {
 
     public void confirmEmail() {
         System.out.println("TOKEN " + token);
-        Optional<User> user = userService.findByName(token);
+        Optional<User> user = userService.findByConfirmationToken(token);
         user.ifPresent(usr -> {
             usr.setConfirmed(true);
             usr.setConfirmationToken("");

@@ -51,21 +51,21 @@ public class ConfirmationMailService {
 
         String contextPath = servletContext.getContextPath();
         // TODO: change to real domain
-        String webserver = "localhost:8080";
+        String webserver = "http://localhost:8080";
         String confirmationToken = user.getConfirmationToken();
         String link = webserver + contextPath + "/confirm.xhtml?token=" + confirmationToken;
 
-        String msg = "Hello, " + user.getName() + "!\n\n" +
+        String msg = "<h3>Hello, " + user.getName() + "!</h3><br /><br />" +
                 "to confirm you e-mail address in the Grocery List Manager application, " +
                 "please click on the link below or copy it to " +
-                "your web browser address bar.\n\n" +
-                link + "\n\n" +
+                "your web browser address bar.<br /><br />" +
+                "<a href=\"" + link + "\">" + link + "</a><br /><br />" +
                 "This helps use to make sure that you are a real personn and that your address " +
                 "can be used for password recovery should you need that. If you fail to confirm your e-mail," +
-                "your acount will be removed after 48 hours.\n\n" +
+                "your acount will be removed after 48 hours.<br /><br />" +
                 "Your Grocery List Manager Team";
         MimeBodyPart mimeBodyPart = new MimeBodyPart();
-        mimeBodyPart.setContent(msg, "text/plain; charset=utf-8");
+        mimeBodyPart.setContent(msg, "text/html; charset=utf-8");
 
         Multipart multipart = new MimeMultipart();
         multipart.addBodyPart(mimeBodyPart);
