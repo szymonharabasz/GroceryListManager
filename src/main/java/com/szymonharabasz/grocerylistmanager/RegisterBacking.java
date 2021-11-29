@@ -37,6 +37,12 @@ public class RegisterBacking {
     @Inject
     private Event<User> userRegistrationEvent;
 
+    @Inject
+    private FacesContext facesContext;
+
+    @Inject
+    private ExternalContext externalContext;
+
     @NotBlank
     @Alphanumeric
     @Size(min = 4, max = 20)
@@ -89,5 +95,16 @@ public class RegisterBacking {
         user.setConfirmationToken(RandomStringUtils.randomAlphanumeric(32));
         userService.save(user);
         userRegistrationEvent.fireAsync(user);
+        facesContext.addMessage(null,
+                new FacesMessage(FacesMessage.SEVERITY_INFO, "Account created",
+                        "An e-mail has been sent to the address you provided in the registration. " +
+                                "Check your mailbox and click the confirmation link to activate your account.e"));
+        try {
+            externalContext.redirect(externalContext.getRequestContextPath() + "/email-sent.xhtml");
+        } catch (IOException e) {
+            facesContext.addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    "An error has occured when redirecting to the confirmation page.", null));
+
+        }
     }
 }
