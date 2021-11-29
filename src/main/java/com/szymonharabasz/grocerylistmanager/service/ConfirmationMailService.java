@@ -4,6 +4,7 @@ import com.szymonharabasz.grocerylistmanager.domain.User;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.ObservesAsync;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.mail.*;
@@ -18,7 +19,7 @@ public class ConfirmationMailService {
     @Inject
     private ServletContext servletContext;
 
-    public void sendEmail(User user) throws MessagingException {
+    public void sendEmail(@ObservesAsync User user) throws MessagingException {
         String host = servletContext.getInitParameter("mail.smtp.host");
         String port = servletContext.getInitParameter("mail.smtp.port");
 

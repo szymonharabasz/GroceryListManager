@@ -8,6 +8,7 @@ import com.szymonharabasz.grocerylistmanager.validation.Password;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import javax.enterprise.context.RequestScoped;
+import javax.enterprise.event.Event;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -32,6 +33,9 @@ public class RegisterBacking {
 
     @Inject
     private ConfirmationMailService confirmationMailService;
+
+    @Inject
+    private Event<User> userRegistrationEvent;
 
     @NotBlank
     @Alphanumeric
@@ -80,10 +84,10 @@ public class RegisterBacking {
         this.email = email;
     }
 
-    public void register() throws MessagingException {
+    public void register() {
         User user = new User(Utils.generateID(), username, password, email);
         user.setConfirmationToken(RandomStringUtils.randomAlphanumeric(32));
         userService.save(user);
-        confirmationMailService.sendEmail(user);
+        userRegistrationEvent.fireAsync(user);
     }
 }
