@@ -15,7 +15,7 @@ public class User {
     @Column
     private String name;
     @Column
-    private String password;
+    private String passwordHash;
     @Column
     private String email;
     @Column
@@ -29,10 +29,10 @@ public class User {
 
     public User() {}
 
-    public User(String id, String name, String password, String email) {
+    public User(String id, String name, String passwordHash, String email) {
         this.id = id;
         this.name = name;
-        this.password = password;
+        this.passwordHash = passwordHash;
         this.email = email;
         this.confirmed = false;
         this.registered = new Date();
@@ -58,12 +58,12 @@ public class User {
         this.name = name;
     }
 
-    public String getPassword() {
-        return password;
+    public String getPasswordHash() {
+        return passwordHash;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
     }
 
     public String getEmail() {
@@ -88,5 +88,13 @@ public class User {
 
     public void setConfirmationToken(String confirmationToken) {
         this.confirmationToken = confirmationToken;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

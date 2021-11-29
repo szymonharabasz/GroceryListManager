@@ -33,7 +33,7 @@ public class MongoIdentityStore implements IdentityStore {
         UsernamePasswordCredential usernamePasswordCredential = (UsernamePasswordCredential) credential;
         CredentialValidationResult credentialValidationResult = userService.findByName(usernamePasswordCredential.getCaller()).map(user -> {
             CredentialValidationResult result;
-            if (usernamePasswordCredential.compareTo(user.getName(), user.getPassword())) {
+            if (usernamePasswordCredential.compareTo(user.getName(), user.getPasswordHash())) {
                 result = new CredentialValidationResult(user.getName(), userAdminRoleSet);
             } else {
                 result = CredentialValidationResult.NOT_VALIDATED_RESULT;

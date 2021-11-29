@@ -1,5 +1,7 @@
 package com.szymonharabasz.grocerylistmanager;
 
+import com.szymonharabasz.grocerylistmanager.domain.Salt;
+import com.szymonharabasz.grocerylistmanager.service.HashingService;
 import com.szymonharabasz.grocerylistmanager.service.UserService;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -18,6 +20,7 @@ import javax.security.enterprise.credential.UsernamePasswordCredential;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.security.spec.InvalidKeySpecException;
 
 @Named
 @RequestScoped
@@ -33,6 +36,9 @@ public class LoginBacking {
 
     @Inject
     private UserService userService;
+
+    @Inject
+    private HashingService hashingService;
 
     private String username;
     private String password;
@@ -53,45 +59,47 @@ public class LoginBacking {
         this.password = password;
     }
 
-    public void handleLogin() throws IOException {
+    public void handleLogin() {
         System.out.println("Logged in " + username + ", " + password);
-        UsernamePasswordCredential usernamePasswordCredential = new UsernamePasswordCredential(username, password);
-        AuthenticationParameters authenticationParameters = AuthenticationParameters.withParams().credential(usernamePasswordCredential);
-        HttpServletRequest request = (HttpServletRequest) externalContext.getRequest();
-        HttpServletResponse response = (HttpServletResponse) externalContext.getResponse();
-        AuthenticationStatus authenticationStatus = securityContext.authenticate(request, response, authenticationParameters);
-        System.err.println("Authentication status: " + authenticationStatus);
-        switch (authenticationStatus) {
-            case SEND_CONTINUE:
-                facesContext.responseComplete();
-                break;
-            case SEND_FAILURE:
-                facesContext.addMessage(null,
-                        new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                                "Wrong user name or password", null));
-                break;
-            case SUCCESS:
-                userService.findByName(username).ifPresent(user -> {
-                    if (user.isConfirmed()) {
-                        facesContext.addMessage(null,
-                                new FacesMessage(FacesMessage.SEVERITY_INFO, "Login succeeded", null));
-                        try {
-                            externalContext.redirect(externalContext.getRequestContextPath() + "/index.xhtml");
-                        } catch (IOException e) {
-                            facesContext.addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                                    "An error has occured when redirecting to the home page.", null));
+        userService.findByName(username).ifPresent(user ->
+                hashingService.findByUserId(user.getId()).ifPresent(salt -> {
+                    String passwordHash = HashingService.createHash(password, salt);
+                    UsernamePasswordCredential usernamePasswordCredential = new UsernamePasswordCredential(username, passwordHash);
+                    AuthenticationParameters authenticationParameters = AuthenticationParameters.withParams().credential(usernamePasswordCredential);
+                    HttpServletRequest request = (HttpServletRequest) externalContext.getRequest();
+                    HttpServletResponse response = (HttpServletResponse) externalContext.getResponse();
+                    AuthenticationStatus authenticationStatus = securityContext.authenticate(request, response, authenticationParameters);
+                    System.err.println("Authentication status: " + authenticationStatus);
+                    switch (authenticationStatus) {
+                        case SEND_CONTINUE:
+                            facesContext.responseComplete();
+                            break;
+                        case SEND_FAILURE:
+                            facesContext.addMessage(null,
+                                    new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                                            "Wrong user name or password", null));
+                            break;
+                        case SUCCESS:
+                            if (user.isConfirmed()) {
+                                facesContext.addMessage(null,
+                                        new FacesMessage(FacesMessage.SEVERITY_INFO, "Login succeeded", null));
+                                try {
+                                    externalContext.redirect(externalContext.getRequestContextPath() + "/index.xhtml");
+                                } catch (IOException e) {
+                                    facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                                            "An error has occured when redirecting to the home page.", null));
 
-                        }
-                    } else {
-                        facesContext.addMessage(null,
-                                new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                                        "Your e-mail address is not confirmed. Check your mailbox " +
-                                                "to find a confirmation link.", null));
-
+                                }
+                            } else {
+                                facesContext.addMessage(null,
+                                        new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                                                "Your e-mail address is not confirmed. Check your mailbox " +
+                                                        "to find a confirmation link.", null));
+                            }
+                            break;
+                        case NOT_DONE:
                     }
-                });
-                break;
-            case NOT_DONE:
-        }
+                })
+        );
     }
 }
