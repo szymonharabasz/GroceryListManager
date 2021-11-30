@@ -50,7 +50,7 @@ public class HashingService {
         }
         return hash;
     }
-    public static String createHash(String password, Salt salt) {
-        return createHash(password, salt.getSalt());
+    public static String createHash(String string, Salt salt) {
+        return createHash(string, salt.getSalt());
     }
 }

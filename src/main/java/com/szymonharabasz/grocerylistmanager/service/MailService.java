@@ -58,7 +58,8 @@ public class MailService {
         String contextPath = servletContext.getContextPath();
         // TODO: change to real domain
         String webserver = "http://localhost:8080";
-        String link = webserver + contextPath + "/reset-password.xhtml?token=" + userTokenWrapper.getToken();
+        String link = webserver + contextPath + "/reset-password.xhtml?user=" + userTokenWrapper.getUser().getName() +
+                "&token=" + userTokenWrapper.getToken();
 
         String msg = "<h3>Hello, " + userTokenWrapper.getUser().getName() + "!</h3><br /><br />" +
                 "to reset your password in the Grocery List Manager application, " +

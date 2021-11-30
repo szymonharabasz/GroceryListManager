@@ -37,7 +37,7 @@ public class ConfirmationEmailBacking {
         Optional<User> user = userService.findByConfirmationToken(token);
         user.ifPresent(usr -> {
             usr.setConfirmed(true);
-            usr.setConfirmationToken("");
+            usr.setConfirmationToken(null);
             userService.save(usr);
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Success",
