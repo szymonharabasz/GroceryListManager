@@ -30,6 +30,7 @@ public class UserService {
     }
 
     public Optional<User> findByName(String name) {
+        if (name == null) return Optional.empty();
         return repository.findByName(name);
     }
 
