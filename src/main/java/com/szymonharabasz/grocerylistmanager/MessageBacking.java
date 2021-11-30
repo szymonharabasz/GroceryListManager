@@ -46,6 +46,14 @@ public class MessageBacking {
             title = "Password reset requested";
             header = "Password reset requested";
         }
+        else if (Objects.equals(type, "wrong-token")) {
+            facesContext.addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Problem with the link",
+                            "A wrong token has been provided. Check the link you have received in the e-mail." +
+                                    "The link could also have been used already."));
+            title = "Wrong token";
+            header = "Wrong token";
+        }
     }
 
     public String getType() {

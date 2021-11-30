@@ -5,6 +5,7 @@ import com.szymonharabasz.grocerylistmanager.service.UserService;
 
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -26,6 +27,9 @@ public class ConfirmationEmailBacking {
     @Inject
     private UserService userService;
 
+    @Inject
+    private ExternalContext externalContext;
+
     private String token;
 
     public void confirmEmail() {
@@ -41,10 +45,12 @@ public class ConfirmationEmailBacking {
                                     "your account"));
         });
         if (!user.isPresent()) {
-            FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
-                            "Your e-mail could not be confirmed. Try again, sign in to other account, " +
-                                    "or try to register again."));
+            try {
+                externalContext.redirect(externalContext.getRequestContextPath() + "/message.xhtml?type=wrong-token");
+            } catch (IOException e) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                        "An error has occured when redirecting to the confirmation page.", null));
+            }
         }
     }
 
