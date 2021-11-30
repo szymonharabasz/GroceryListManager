@@ -2,7 +2,7 @@ package com.szymonharabasz.grocerylistmanager;
 
 import com.szymonharabasz.grocerylistmanager.domain.Salt;
 import com.szymonharabasz.grocerylistmanager.domain.User;
-import com.szymonharabasz.grocerylistmanager.service.ConfirmationMailService;
+import com.szymonharabasz.grocerylistmanager.service.MailService;
 import com.szymonharabasz.grocerylistmanager.service.HashingService;
 import com.szymonharabasz.grocerylistmanager.service.UserService;
 import com.szymonharabasz.grocerylistmanager.validation.Alphanumeric;
@@ -19,7 +19,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.validation.constraints.*;
 import java.io.IOException;
-import java.security.spec.InvalidKeySpecException;
 
 @Named
 @RequestScoped
@@ -32,7 +31,7 @@ public class RegisterBacking {
     private HashingService hashingService;
 
     @Inject
-    private ConfirmationMailService confirmationMailService;
+    private MailService mailService;
 
     @Inject
     private Event<User> userRegistrationEvent;
@@ -98,10 +97,6 @@ public class RegisterBacking {
         user.setConfirmationToken(RandomStringUtils.randomAlphanumeric(32));
         userService.save(user);
         userRegistrationEvent.fireAsync(user);
-        facesContext.addMessage(null,
-                new FacesMessage(FacesMessage.SEVERITY_INFO, "Account created",
-                        "An e-mail has been sent to the address you provided in the registration. " +
-                                "Check your mailbox and click the confirmation link to activate your account.e"));
         try {
             externalContext.redirect(externalContext.getRequestContextPath() + "/message.xhtml?type=email-sent");
         } catch (IOException e) {

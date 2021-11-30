@@ -7,11 +7,11 @@
       xmlns:p="http://primefaces.org/ui">
 <f:view transient="true">
     <f:metadata>
-        <f:viewParam name="type" #{messageBacking.type}" />
+        <f:viewParam name="type" value="#{messageBacking.type}" />
         <f:event listener="#{messageBacking.load}" type="preRenderView" />
     </f:metadata>
     <h:head>
-        <title>#{messageBacking.title}</title>
+        <title>${messageBacking.title}</title>
         <h:outputStylesheet library="webjars" name="primeflex/2.0.0/primeflex.min.css"/>
         <h:outputStylesheet library="css" name="login.css?#{listsController.creationDate}"/>
     </h:head>
@@ -20,7 +20,7 @@
             <div class="ui-g">
                 <div class="ui-g-4"></div>
                 <div class="ui-g-4">
-                    <h3>#{messageBacking.header}</h3>
+                    <h3>${messageBacking.header}</h3>
 
                     <h:form>
                         <p:messages globalOnly="true" showIcon="false" showDetail="true"/>

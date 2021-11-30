@@ -32,7 +32,7 @@ public class HashingService {
     }
 
     public void save(Salt salt) { saltRepository.save(salt); }
-    public Optional<Salt> findByUserId(String userId) {
+    public Optional<Salt> findSaltByUserId(String userId) {
         return saltRepository.findById(userId);
     }
     public static byte[] createSalt() {
@@ -40,8 +40,8 @@ public class HashingService {
         random.nextBytes(salt);
         return salt;
     }
-    public static String createHash(String password, byte[] salt) {
-        KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 128);
+    public static String createHash(String string, byte[] salt) {
+        KeySpec spec = new PBEKeySpec(string.toCharArray(), salt, 65536, 128);
         String hash = null;
         try {
             hash = new String(factory.generateSecret(spec).getEncoded(), StandardCharsets.UTF_8);

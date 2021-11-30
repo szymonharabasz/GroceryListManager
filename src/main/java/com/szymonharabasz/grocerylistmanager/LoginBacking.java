@@ -1,26 +1,21 @@
 package com.szymonharabasz.grocerylistmanager;
 
-import com.szymonharabasz.grocerylistmanager.domain.Salt;
 import com.szymonharabasz.grocerylistmanager.service.HashingService;
 import com.szymonharabasz.grocerylistmanager.service.UserService;
 
-import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.imageio.IIOException;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.security.enterprise.AuthenticationStatus;
 import javax.security.enterprise.SecurityContext;
 import javax.security.enterprise.authentication.mechanism.http.AuthenticationParameters;
-import javax.security.enterprise.credential.Password;
 import javax.security.enterprise.credential.UsernamePasswordCredential;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.security.spec.InvalidKeySpecException;
 
 @Named
 @RequestScoped
@@ -62,7 +57,7 @@ public class LoginBacking {
     public void handleLogin() {
         System.out.println("Logged in " + username + ", " + password);
         userService.findByName(username).ifPresent(user ->
-                hashingService.findByUserId(user.getId()).ifPresent(salt -> {
+                hashingService.findSaltByUserId(user.getId()).ifPresent(salt -> {
                     String passwordHash = HashingService.createHash(password, salt);
                     UsernamePasswordCredential usernamePasswordCredential = new UsernamePasswordCredential(username, passwordHash);
                     AuthenticationParameters authenticationParameters = AuthenticationParameters.withParams().credential(usernamePasswordCredential);

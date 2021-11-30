@@ -1,6 +1,5 @@
 package com.szymonharabasz.grocerylistmanager.domain;
 
-import com.szymonharabasz.grocerylistmanager.validation.Unique;
 import jakarta.nosql.mapping.Column;
 import jakarta.nosql.mapping.Entity;
 import jakarta.nosql.mapping.Id;
@@ -28,7 +27,7 @@ public class User {
     @Column
     private String confirmationToken;
     @Column
-    private String passwordResetToken;
+    private String passwordResetTokenHash;
 
     public User() {}
 
@@ -101,12 +100,12 @@ public class User {
         this.confirmationToken = confirmationToken;
     }
 
-    public String getPasswordResetToken() {
-        return passwordResetToken;
+    public String getPasswordResetTokenHash() {
+        return passwordResetTokenHash;
     }
 
-    public void setPasswordResetToken(String passwordResetToken) {
-        this.passwordResetToken = passwordResetToken;
+    public void setPasswordResetTokenHash(String passwordResetToken) {
+        this.passwordResetTokenHash = passwordResetToken;
     }
 
 }

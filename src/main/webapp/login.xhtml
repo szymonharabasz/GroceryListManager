@@ -26,6 +26,8 @@
                         <p:inputText styleClass="ui-g-12" style="width: auto" id="textLogin" value="#{loginBacking.username}"/>
                         <p:outputLabel styleClass="ui-g-12" style="width: auto" for="textPassword" value="Password"/>
                         <p:password styleClass="ui-g-12" style="width: auto" id="textPassword" value="#{loginBacking.password}"/>
+                        <p:outputLabel value=" "/>
+                        <p:commandLink value="Forgot your password?" action="/request-password-reset.xhtml"/>
                         <p:row>
                             <p:column styleClass="p-col-12 p-md-12 p-xl-12">
                                 <p:commandButton id="btnSignup" ajax="false" value="Sign up" styleClass="p-mr-2 ui-button-outlined"

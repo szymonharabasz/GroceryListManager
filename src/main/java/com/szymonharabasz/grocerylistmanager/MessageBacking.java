@@ -1,23 +1,12 @@
 package com.szymonharabasz.grocerylistmanager;
 
-import com.szymonharabasz.grocerylistmanager.domain.User;
-import com.szymonharabasz.grocerylistmanager.service.ConfirmationMailService;
-import com.szymonharabasz.grocerylistmanager.service.UserService;
-import com.szymonharabasz.grocerylistmanager.validation.Alphanumeric;
-import com.szymonharabasz.grocerylistmanager.validation.Password;
-import org.apache.commons.lang3.RandomStringUtils;
-
 import javax.enterprise.context.RequestScoped;
-import javax.enterprise.event.Event;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
-import java.io.IOException;
+import java.util.Objects;
 
 @Named
 @RequestScoped
@@ -36,19 +25,26 @@ public class MessageBacking {
     private String header;
 
     public void load() {
-        if (type == "email-sent") {
+        if (Objects.equals(type, "email-sent")) {
             facesContext.addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Account created",
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Check your e-mail",
                             "An e-mail has been sent to the address you provided in the registration. " +
-                                    "Check your mailbox and click the confirmation link to activate your account"));
-            title = "Confirma e-mail address";
-            header = "E-mail address confirmation";
-        } else if (type == "password-changed") {
+                                    "Check your mailbox and click the confirmation link to activate your account."));
+            title = "Account created";
+            header = "Account created";
+        } else if (Objects.equals(type, "password-changed")) {
             facesContext.addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Account created",
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Success",
                             "Your password has been successfuly changed."));
             title = "Password changed";
             header = "Password changed";
+        } else if (Objects.equals(type, "password-reset-requested")) {
+            facesContext.addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Check your e-mail",
+                            "An e-mail has been sent to the address you provided in the registration. " +
+                                    "Check your mailbox and click the reset link to change your password."));
+            title = "Password reset requested";
+            header = "Password reset requested";
         }
     }
 
