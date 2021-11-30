@@ -1,5 +1,6 @@
 package com.szymonharabasz.grocerylistmanager.domain;
 
+import com.szymonharabasz.grocerylistmanager.validation.Unique;
 import jakarta.nosql.mapping.Column;
 import jakarta.nosql.mapping.Entity;
 import jakarta.nosql.mapping.Id;
@@ -26,6 +27,8 @@ public class User {
     private Date registered;
     @Column
     private String confirmationToken;
+    @Column
+    private String passwordResetToken;
 
     public User() {}
 
@@ -48,6 +51,14 @@ public class User {
 
     public boolean hasListId(String id) {
         return listIds.contains(id);
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -90,11 +101,12 @@ public class User {
         this.confirmationToken = confirmationToken;
     }
 
-    public String getId() {
-        return id;
+    public String getPasswordResetToken() {
+        return passwordResetToken;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setPasswordResetToken(String passwordResetToken) {
+        this.passwordResetToken = passwordResetToken;
     }
+
 }

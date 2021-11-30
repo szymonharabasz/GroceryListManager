@@ -13,7 +13,8 @@ public class PasswordValidator implements ConstraintValidator<Password, String> 
 
     @Override
     public boolean isValid(String s, ConstraintValidatorContext constraintValidatorContext) {
-         return s.length() >= 8 &&
+        System.err.println("!!!! PASSWORD VALIDATOR HAS BEEN CALLED !!!!");
+        return s.length() >= 8 &&
                  Arrays.stream(capitalLetters.split("")).anyMatch(cs -> s.contains(cs)) &&
                  Arrays.stream(smallLetters.split("")).anyMatch(cs -> s.contains(cs)) &&
                  Arrays.stream(digits.split("")).anyMatch(cs -> s.contains(cs)) &&

@@ -7,6 +7,7 @@ import com.szymonharabasz.grocerylistmanager.service.HashingService;
 import com.szymonharabasz.grocerylistmanager.service.UserService;
 import com.szymonharabasz.grocerylistmanager.validation.Alphanumeric;
 import com.szymonharabasz.grocerylistmanager.validation.Password;
+import com.szymonharabasz.grocerylistmanager.validation.Unique;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import javax.enterprise.context.RequestScoped;
@@ -55,6 +56,7 @@ public class RegisterBacking {
     private String repeatPassword;
     @NotBlank
     @Email
+    @Unique(name = "email", message = "this e-mail address has been already regustered")
     private String email;
 
     public String getUsername() {
@@ -101,7 +103,7 @@ public class RegisterBacking {
                         "An e-mail has been sent to the address you provided in the registration. " +
                                 "Check your mailbox and click the confirmation link to activate your account.e"));
         try {
-            externalContext.redirect(externalContext.getRequestContextPath() + "/email-sent.xhtml");
+            externalContext.redirect(externalContext.getRequestContextPath() + "/message.xhtml?type=email-sent");
         } catch (IOException e) {
             facesContext.addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR,
                     "An error has occured when redirecting to the confirmation page.", null));
