@@ -90,6 +90,10 @@ public class ListsController implements Serializable {
         });
     }
 
+    public void toggleDone(String id, String listId) {
+        findItem(id).ifPresent(item -> listsService.saveItem(item.toGroceryItem(), listId));
+    }
+
     public void removeItem(String id) {
         currenUser().ifPresent(user -> {
             user.removeListId(id);
@@ -101,7 +105,7 @@ public class ListsController implements Serializable {
 
     public void addList() {
         System.err.println("Adding new list for user " + securityContext.getCallerPrincipal().getName());
-        currenUser().ifPresent(user -> {;
+        currenUser().ifPresent(user -> {
             System.err.println("Adding new list for user " + user.getName());
             GroceryListView list = new GroceryListView(UUID.randomUUID().toString(), "", "");
             user.addListId(list.getId());
@@ -113,7 +117,7 @@ public class ListsController implements Serializable {
     }
 
     public void addItem(String listId) {
-        GroceryItemView item = new GroceryItemView(UUID.randomUUID().toString(), "", "", 0.0f);
+        GroceryItemView item = new GroceryItemView(UUID.randomUUID().toString(), false,"", "", 0.0f);
         item.setEdited(true);
         findList(listId).ifPresent(list -> {
             logger.severe("Adding item to list " + list.getName());
@@ -140,8 +144,7 @@ public class ListsController implements Serializable {
 
     public void fetchLists() {
         logger.warning("Lists are fetched.");
-        currenUser().ifPresent(user -> {
-            lists = listsService.getLists().stream()
+        currenUser().ifPresent(user -> lists = listsService.getLists().stream()
                     .filter(list -> user.hasListId(list.getId()))
                     .map(list -> {
                         GroceryListView listView = new GroceryListView(list);
@@ -158,8 +161,8 @@ public class ListsController implements Serializable {
                             ).collect(Collectors.toList()));
                         });
                         return listView;
-                    }).collect(Collectors.toList());
-        });
+                    }).collect(Collectors.toList())
+        );
     }
 
     Optional<User> currenUser() {

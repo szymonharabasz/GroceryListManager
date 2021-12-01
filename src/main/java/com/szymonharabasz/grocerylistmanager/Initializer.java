@@ -33,8 +33,8 @@ public class Initializer {
     public void loadLists() {
         String listId1 = generateID();
         GroceryList list1 = new GroceryList(listId1, "Aldi", "Shopping list for Aldi");
-        list1.addItem(new GroceryItem(generateID(), "Potatoes", "kg", 1.0f));
-        list1.addItem(new GroceryItem(generateID(), "Tomatoes", "kg", 0.5f));
+        list1.addItem(new GroceryItem(generateID(), false,"Potatoes", "kg", 1.0f));
+        list1.addItem(new GroceryItem(generateID(), false,"Tomatoes", "kg", 0.5f));
         GroceryList list2 = new GroceryList(generateID(), "Rewe", "Shopping list for Rewe");
         listsService.saveList(list1);
         listsService.saveList(list2);

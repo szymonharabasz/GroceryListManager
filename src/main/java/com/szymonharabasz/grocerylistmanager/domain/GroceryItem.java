@@ -12,6 +12,8 @@ public class GroceryItem implements Serializable {
     @Id
     private String id;
     @Column
+    private boolean done;
+    @Column
     private String name;
     @Column
     private String unit;
@@ -20,8 +22,9 @@ public class GroceryItem implements Serializable {
 
     public GroceryItem() {}
 
-    public GroceryItem(String id, String name, String unit, float quantity) {
+    public GroceryItem(String id, boolean done, String name, String unit, float quantity) {
         this.id = id;
+        this.done = done;
         this.name = name;
         this.unit = unit;
         this.quantity = quantity;
@@ -33,6 +36,14 @@ public class GroceryItem implements Serializable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public boolean isDone() {
+        return done;
+    }
+
+    public void setDone(boolean done) {
+        this.done = done;
     }
 
     public String getName() {

@@ -7,13 +7,15 @@ import java.util.Objects;
 
 public class GroceryItemView implements Serializable {
     private String id;
+    private boolean done;
     private String name;
     private String unit;
     private float quantity;
     private boolean edited;
 
-    public GroceryItemView(String id, String name, String unit, float quantity) {
+    public GroceryItemView(String id, boolean done, String name, String unit, float quantity) {
         this.id = id;
+        this.done = done;
         this.name = name;
         this.unit = unit;
         this.quantity = quantity;
@@ -21,11 +23,11 @@ public class GroceryItemView implements Serializable {
     }
 
     public GroceryItemView(GroceryItem item) {
-        this(item.getId(), item.getName(), item.getUnit(), item.getQuantity());
+        this(item.getId(), item.isDone(), item.getName(), item.getUnit(), item.getQuantity());
     }
 
     public GroceryItem toGroceryItem() {
-        return new GroceryItem(id, name, unit, quantity);
+        return new GroceryItem(id, done, name, unit, quantity);
     }
 
     public String getId() {
@@ -34,6 +36,14 @@ public class GroceryItemView implements Serializable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public boolean isDone() {
+        return done;
+    }
+
+    public void setDone(boolean done) {
+        this.done = done;
     }
 
     public String getName() {
