@@ -79,6 +79,9 @@ public class LoginBacking {
                                 facesContext.addMessage(null,
                                         new FacesMessage(FacesMessage.SEVERITY_INFO, "Login succeeded", null));
                                 try {
+                                    System.err.println("SERVER " +
+                                            ((HttpServletRequest) externalContext.getRequest()).getServerName() + ":" +
+                                            ((HttpServletRequest) externalContext.getRequest()).getServerPort());
                                     externalContext.redirect(externalContext.getRequestContextPath() + "/index.xhtml");
                                 } catch (IOException e) {
                                     facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,

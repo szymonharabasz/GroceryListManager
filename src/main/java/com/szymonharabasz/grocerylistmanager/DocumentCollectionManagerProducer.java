@@ -24,7 +24,8 @@ public class DocumentCollectionManagerProducer {
     @PostConstruct
     public void init() {
         configuration = new MongoDBDocumentConfiguration();
-        Map<String, Object> settings = Collections.singletonMap("mongodb-server-host-1", "localhost:27017");
+        Map<String, Object> settings = Collections.singletonMap("mongodb-server-host-1", "host.docker.internal:27017");
+//        Map<String, Object> settings = Collections.singletonMap("mongodb-server-host-1", "localhost:27017");
         managerFactory = configuration.get(Settings.of(settings));
     }
 

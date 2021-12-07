@@ -24,7 +24,7 @@ public class GroceryListView implements Serializable {
         this.name = name;
         this.description = description;
         this.edited = false;
-        this.expanded = false;
+        this.expanded = true;
     }
 
     public GroceryListView(GroceryList list) {
@@ -35,7 +35,7 @@ public class GroceryListView implements Serializable {
     public GroceryList toGroceryList() {
         GroceryList groceryList = new GroceryList(id, name, description);
         groceryList.setItems(items.stream()
-                .map(groceryItemView -> groceryItemView.toGroceryItem()).collect(Collectors.toList()));
+                .map(GroceryItemView::toGroceryItem).collect(Collectors.toList()));
         return groceryList;
     }
 
