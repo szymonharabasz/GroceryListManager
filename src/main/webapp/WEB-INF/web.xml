@@ -28,16 +28,38 @@
         <param-name>javax.faces.FACELETS_SKIP_COMMENTS</param-name>
         <param-value>true</param-value>
     </context-param>
-<!--  For now the keys are in the domain's defailt-web.xml  -->
-<!--    <context-param>-->
-<!--        <param-name>primefaces.PUBLIC_CAPTCHA_KEY</param-name>-->
-<!--        <param-value>PUBLIC_CAPTCHA_KEY</param-value>-->
-<!--    </context-param>-->
-<!--    <context-param>-->
-<!--        <param-name>primefaces.PRIVATE_CAPTCHA_KEY</param-name>-->
-<!--        <param-value>PRIVATE_CAPTCHA_KEY</param-value>-->
-<!--    </context-param>-->
-<!--    -->
+    <context-param>
+        <param-name>testVariable</param-name>
+        <param-value>${TEST_VARIABLE}</param-value>
+    </context-param>
+    <context-param>
+        <param-name>primefaces.PUBLIC_CAPTCHA_KEY</param-name>
+        <param-value>${PUBLIC_CAPTCHA_KEY}</param-value>
+    </context-param>
+    <context-param>
+        <param-name>primefaces.PRIVATE_CAPTCHA_KEY</param-name>
+        <param-value>${PRIVATE_CAPTCHA_KEY}</param-value>
+    </context-param>
+    <context-param>
+        <param-name>mail.smtp.host</param-name>
+        <param-value>smtp.gmail.com</param-value>
+    </context-param>
+    <context-param>
+        <param-name>mail.smtp.port</param-name>
+        <param-value>465</param-value>
+    </context-param>
+    <context-param>
+        <param-name>mail.smtp.username</param-name>
+        <param-value>grocerylistmanagerapp@gmail.com</param-value>
+    </context-param>
+    <context-param>
+        <param-name>mail.smtp.password</param-name>
+        <param-value>${EMAIL_PASSWORD}</param-value>
+    </context-param>
+    <context-param>
+        <param-name>mail.smtp.address</param-name>
+        <param-value>grocerylistmanagerapp@gmail.com</param-value>
+    </context-param>
     <security-constraint>
         <web-resource-collection>
             <web-resource-name>Lists page</web-resource-name>

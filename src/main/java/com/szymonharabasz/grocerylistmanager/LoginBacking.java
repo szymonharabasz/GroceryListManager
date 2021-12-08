@@ -55,7 +55,7 @@ public class LoginBacking {
     }
 
     public void handleLogin() {
-        System.out.println("Logged in " + username + ", " + password);
+        System.out.println("TEST VARIABLE " + externalContext.getInitParameter("testVariable"));
         userService.findByName(username).ifPresent(user ->
                 hashingService.findSaltByUserId(user.getId()).ifPresent(salt -> {
                     String passwordHash = HashingService.createHash(password, salt);
