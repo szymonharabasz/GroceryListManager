@@ -78,6 +78,14 @@ RUN true \
     && ${PAYARA_DIR}/bin/asadmin --user=${ADMIN_USER} --passwordfile=${PASSWORD_FILE} \
       set-log-attributes com.sun.enterprise.server.logging.GFFileHandler.logtoFile=false \
     && ${PAYARA_DIR}/bin/asadmin --user=${ADMIN_USER} --passwordfile=${PASSWORD_FILE} create-system-properties `cat system-properties` \
+    && ${PAYARA_DIR}/bin/asadmin --user=${ADMIN_USER} --passwordfile=${PASSWORD_FILE} \
+      set configs.config.server-config.network-config.protocols.protocol.http-listener-1.http.xpowered-by=false \
+    && ${PAYARA_DIR}/bin/asadmin --user=${ADMIN_USER} --passwordfile=${PASSWORD_FILE} \
+      set configs.config.server-config.network-config.protocols.protocol.http-listener-2.http.xpowered-by=false \
+    && ${PAYARA_DIR}/bin/asadmin --user=${ADMIN_USER} --passwordfile=${PASSWORD_FILE} \
+      set configs.config.server-config.network-config.protocols.protocol.http-listener-1.http.server-header=false \
+    && ${PAYARA_DIR}/bin/asadmin --user=${ADMIN_USER} --passwordfile=${PASSWORD_FILE} \
+      set configs.config.server-config.network-config.protocols.protocol.http-listener-2.http.server-header=false \
     && ${PAYARA_DIR}/bin/asadmin --user=${ADMIN_USER} --passwordfile=${PASSWORD_FILE} stop-domain ${DOMAIN_NAME}
 
 RUN rm -rf \
