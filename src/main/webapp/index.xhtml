@@ -45,7 +45,7 @@
                                                  rendered="#{list.edited}"
                                                  value="#{list.description}"/>
                                 </div>
-                                <div class="ui-g-4">
+                                <div class="ui-g-4" style="text-align: right">
                                     <p:commandLink rendered="#{!list.expanded}" value="Expand">
                                         <p:ajax event="click" listener="#{listsController.expand(list.id)}"
                                                 process="@all" update="@all"/>
@@ -91,7 +91,7 @@
                                                 <h:outputText value="#{item.unit}" rendered="#{!item.edited}"/>
                                                 <p:inputText styleClass="ui-g-12" value="#{item.unit}" rendered="#{item.edited}"/>
                                             </div>
-                                            <div class="ui-g-3 ui-g-offset-1">
+                                            <div class="ui-g-3 ui-g-offset-1" style="text-align: right">
                                                 <p:commandLink rendered="#{!item.edited}" value="Edit">
                                                     <p:ajax event="click"
                                                             listener="#{listsController.editItem(item.id)}"
