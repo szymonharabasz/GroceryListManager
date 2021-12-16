@@ -9,9 +9,13 @@ import com.szymonharabasz.grocerylistmanager.view.GroceryItemView;
 import com.szymonharabasz.grocerylistmanager.view.GroceryListView;
 
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.security.enterprise.SecurityContext;
+import java.io.IOException;
 import java.io.Serializable;
 import java.security.Principal;
 import java.util.*;
@@ -25,6 +29,10 @@ public class ListsController implements Serializable {
     private final UserService userService;
     @Inject
     private SecurityContext securityContext;
+    @Inject
+    private ExternalContext externalContext;
+    @Inject
+    private FacesContext facesContext;
     private Date creationDate = new Date();
     private List<GroceryListView> lists = new ArrayList<>();
     private String greeting;
@@ -165,6 +173,17 @@ public class ListsController implements Serializable {
         );
     }
 
+    public void checkConfirmed() {
+        System.err.println("CHECK CONFIRMED CALLED");
+        currenUser().ifPresent(user -> {
+            System.err.println("USER IS PRESENT");
+            if (!user.isConfirmed()) {
+                System.err.println("USER IS NOT CONFIRMED, REDIRECTING");
+                redirect("/request-new-confirmation.xhtml");
+            }
+        });
+    }
+
     Optional<User> currenUser() {
         if (securityContext != null) {
             Principal caller = securityContext.getCallerPrincipal();
@@ -174,4 +193,12 @@ public class ListsController implements Serializable {
         }
     }
 
+    private void redirect(String to) {
+        try {
+            externalContext.redirect(externalContext.getRequestContextPath() + to);
+        } catch (IOException e) {
+            facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    "An error has occured.", null));
+        }
+    }
 }

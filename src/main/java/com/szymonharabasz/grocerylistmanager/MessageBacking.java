@@ -30,8 +30,8 @@ public class MessageBacking {
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Check your e-mail",
                             "An e-mail has been sent to the address you provided in the registration. " +
                                     "Check your mailbox and click the confirmation link to activate your account."));
-            title = "Account created";
-            header = "Account created";
+            title = "Confirmation e-mail sent";
+            header = "Confirmation e-mail sent";
         } else if (Objects.equals(type, "password-changed")) {
             facesContext.addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Success",

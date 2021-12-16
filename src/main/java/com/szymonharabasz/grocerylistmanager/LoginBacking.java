@@ -56,55 +56,36 @@ public class LoginBacking {
 
     public void handleLogin() {
         System.out.println("TEST VARIABLE " + externalContext.getInitParameter("testVariable"));
-        userService.findByName(username).ifPresent(user ->
-                hashingService.findSaltByUserId(user.getId()).ifPresent(salt -> {
-                    String passwordHash = HashingService.createHash(password, salt);
-                    UsernamePasswordCredential usernamePasswordCredential = new UsernamePasswordCredential(username, passwordHash);
-                    AuthenticationParameters authenticationParameters = AuthenticationParameters.withParams().credential(usernamePasswordCredential);
-                    HttpServletRequest request = (HttpServletRequest) externalContext.getRequest();
-                    HttpServletResponse response = (HttpServletResponse) externalContext.getResponse();
-                    AuthenticationStatus authenticationStatus = securityContext.authenticate(request, response, authenticationParameters);
-                    System.err.println("Authentication status: " + authenticationStatus);
-                    switch (authenticationStatus) {
-                        case SEND_CONTINUE:
-                            if (user.isConfirmed()) {
-                                facesContext.responseComplete();
-                            } else {
-                                facesContext.addMessage(null,
-                                        new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                                                "Your e-mail address is not confirmed. Check your mailbox " +
-                                                        "to find a confirmation link.", null));
-                            }
-                            break;
-                        case SEND_FAILURE:
-                            facesContext.addMessage(null,
-                                    new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                                            "Wrong user name or password", null));
-                            break;
-                        case SUCCESS:
-                            if (user.isConfirmed()) {
-                                facesContext.addMessage(null,
-                                        new FacesMessage(FacesMessage.SEVERITY_INFO, "Login succeeded", null));
-                                try {
-                                    System.err.println("SERVER " +
-                                            ((HttpServletRequest) externalContext.getRequest()).getServerName() + ":" +
-                                            ((HttpServletRequest) externalContext.getRequest()).getServerPort());
-                                    externalContext.redirect(externalContext.getRequestContextPath() + "/index.xhtml");
-                                } catch (IOException e) {
-                                    facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                                            "An error has occured when redirecting to the home page.", null));
-
-                                }
-                            } else {
-                                facesContext.addMessage(null,
-                                        new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                                                "Your e-mail address is not confirmed. Check your mailbox " +
-                                                        "to find a confirmation link.", null));
-                            }
-                            break;
-                        case NOT_DONE:
-                    }
-                })
-        );
+        userService.findByName(username).flatMap(user -> hashingService.findSaltByUserId(user.getId())).ifPresent(salt -> {
+            String passwordHash = HashingService.createHash(password, salt);
+            UsernamePasswordCredential usernamePasswordCredential = new UsernamePasswordCredential(username, passwordHash);
+            AuthenticationParameters authenticationParameters = AuthenticationParameters.withParams().credential(usernamePasswordCredential);
+            HttpServletRequest request = (HttpServletRequest) externalContext.getRequest();
+            HttpServletResponse response = (HttpServletResponse) externalContext.getResponse();
+            AuthenticationStatus authenticationStatus = securityContext.authenticate(request, response, authenticationParameters);
+            System.err.println("Authentication status: " + authenticationStatus);
+            switch (authenticationStatus) {
+                case SEND_CONTINUE:
+                    facesContext.responseComplete();
+                    break;
+                case SEND_FAILURE:
+                    facesContext.addMessage(null,
+                            new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                                    "Wrong user name or password", null));
+                    break;
+                case SUCCESS:
+                    redirect("/index.xhtml");
+                    break;
+                case NOT_DONE:
+            }
+        });
+    }
+    private void redirect(String to) {
+        try {
+            externalContext.redirect(externalContext.getRequestContextPath() + to);
+        } catch (IOException e) {
+            facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    "An error has occured.", null));
+        }
     }
 }

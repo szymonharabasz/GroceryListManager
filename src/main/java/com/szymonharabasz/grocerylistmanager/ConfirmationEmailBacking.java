@@ -49,7 +49,7 @@ public class ConfirmationEmailBacking {
                 externalContext.redirect(externalContext.getRequestContextPath() + "/message.xhtml?type=wrong-token");
             } catch (IOException e) {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                        "An error has occured when redirecting to the confirmation page.", null));
+                        "An error has occured.", null));
             }
         }
     }
