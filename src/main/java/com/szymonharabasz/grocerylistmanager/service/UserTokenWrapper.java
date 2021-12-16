@@ -2,7 +2,9 @@ package com.szymonharabasz.grocerylistmanager.service;
 
 import com.szymonharabasz.grocerylistmanager.domain.User;
 
-public class UserTokenWrapper {
+import java.io.Serializable;
+
+public class UserTokenWrapper implements Serializable {
     private User user;
     private String token;
 

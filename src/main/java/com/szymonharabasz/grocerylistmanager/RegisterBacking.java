@@ -1,5 +1,6 @@
 package com.szymonharabasz.grocerylistmanager;
 
+import com.szymonharabasz.grocerylistmanager.domain.ExpirablePayload;
 import com.szymonharabasz.grocerylistmanager.domain.Salt;
 import com.szymonharabasz.grocerylistmanager.domain.User;
 import com.szymonharabasz.grocerylistmanager.service.MailService;
@@ -19,6 +20,10 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.validation.constraints.*;
 import java.io.IOException;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.Date;
+import java.util.Optional;
 
 @Named
 @RequestScoped
@@ -94,7 +99,8 @@ public class RegisterBacking {
         Salt salt = new Salt(Utils.generateID(), HashingService.createSalt());
         hashingService.save(salt);
         User user = new User(salt.getUserId(), username, HashingService.createHash(password, salt), email);
-        user.setConfirmationToken(RandomStringUtils.randomAlphanumeric(32));
+        Date expiresAt = Date.from(Instant.now().plus(Duration.ofDays(2)));
+        user.setConfirmationToken(new ExpirablePayload(RandomStringUtils.randomAlphanumeric(32), expiresAt));
         userService.save(user);
         userRegistrationEvent.fireAsync(user);
         try {

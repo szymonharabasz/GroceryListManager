@@ -67,7 +67,14 @@ public class LoginBacking {
                     System.err.println("Authentication status: " + authenticationStatus);
                     switch (authenticationStatus) {
                         case SEND_CONTINUE:
-                            facesContext.responseComplete();
+                            if (user.isConfirmed()) {
+                                facesContext.responseComplete();
+                            } else {
+                                facesContext.addMessage(null,
+                                        new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                                                "Your e-mail address is not confirmed. Check your mailbox " +
+                                                        "to find a confirmation link.", null));
+                            }
                             break;
                         case SEND_FAILURE:
                             facesContext.addMessage(null,

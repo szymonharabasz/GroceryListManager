@@ -4,12 +4,14 @@ import jakarta.nosql.mapping.Column;
 import jakarta.nosql.mapping.Entity;
 import jakarta.nosql.mapping.Id;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Entity("User")
-public class User {
+public class User implements Serializable {
     @Id
     private String id;
     @Column
@@ -25,9 +27,9 @@ public class User {
     @Column
     private Date registered;
     @Column
-    private String confirmationToken;
+    private ExpirablePayload confirmationToken = null;
     @Column
-    private String passwordResetTokenHash;
+    private ExpirablePayload passwordResetTokenHash = null;
 
     public User() {}
 
@@ -92,19 +94,19 @@ public class User {
         this.confirmed = confirmed;
     }
 
-    public String getConfirmationToken() {
+    public ExpirablePayload getConfirmationToken() {
         return confirmationToken;
     }
 
-    public void setConfirmationToken(String confirmationToken) {
+    public void setConfirmationToken(ExpirablePayload confirmationToken) {
         this.confirmationToken = confirmationToken;
     }
 
-    public String getPasswordResetTokenHash() {
+    public ExpirablePayload getPasswordResetTokenHash() {
         return passwordResetTokenHash;
     }
 
-    public void setPasswordResetTokenHash(String passwordResetToken) {
+    public void setPasswordResetTokenHash(ExpirablePayload passwordResetToken) {
         this.passwordResetTokenHash = passwordResetToken;
     }
 

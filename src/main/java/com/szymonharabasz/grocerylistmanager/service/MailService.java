@@ -1,5 +1,6 @@
 package com.szymonharabasz.grocerylistmanager.service;
 
+import com.szymonharabasz.grocerylistmanager.domain.ExpirablePayload;
 import com.szymonharabasz.grocerylistmanager.domain.User;
 import org.apache.commons.lang3.RandomStringUtils;
 
@@ -27,7 +28,7 @@ public class MailService {
         String contextPath = servletContext.getContextPath();
         // TODO: change to real domain
         String webserver = "https://localhost:8181";
-        String confirmationToken = user.getConfirmationToken();
+        String confirmationToken = user.getConfirmationToken().getPayload();
         String link = webserver + contextPath + "/confirm.xhtml?token=" + confirmationToken;
 
         String msg = "<h3>Hello, " + user.getName() + "!</h3><br /><br />" +

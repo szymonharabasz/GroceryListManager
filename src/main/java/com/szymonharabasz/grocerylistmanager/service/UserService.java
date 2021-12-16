@@ -10,6 +10,7 @@ import jakarta.nosql.mapping.document.DocumentTemplate;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.util.List;
 import java.util.Optional;
 
 import static jakarta.nosql.document.DocumentQuery.select;
@@ -41,5 +42,9 @@ public class UserService {
     public Optional<User> findBy(String field, String value) {
         DocumentQuery query = select().from("User").where(field).eq(value).build();
         return documentTemplate.singleResult(query);
+    }
+
+    public List<User> findAll() {
+        return repository.findAll();
     }
 }
