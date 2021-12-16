@@ -1,13 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=PT+Sans&family=Work+Sans&display=swap');
 
-.ui-dataview-header {
-    display: none;
-}
-
-.ui-commandlink {
-    margin-right: 1em;
-}
-
 .ui-panelgrid.showcase-text-align-center .ui-grid-responsive .ui-panelgrid-cell {
     text-align: center;
 }
