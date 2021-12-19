@@ -12,17 +12,20 @@ import java.util.Objects;
 @RequestScoped
 public class MessageBacking {
 
-    @Inject
-    private FacesContext facesContext;
-
-    @Inject
-    private ExternalContext externalContext;
+    private final FacesContext facesContext;
+    private final ExternalContext externalContext;
 
     private String type;
 
     private String title;
 
     private String header;
+
+    @Inject
+    public MessageBacking(FacesContext facesContext) {
+        this.facesContext = facesContext;
+        this.externalContext = facesContext.getExternalContext();
+    }
 
     public void load() {
         if (Objects.equals(type, "email-sent")) {
