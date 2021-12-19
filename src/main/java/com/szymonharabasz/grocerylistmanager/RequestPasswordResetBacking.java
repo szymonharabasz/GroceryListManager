@@ -1,5 +1,6 @@
 package com.szymonharabasz.grocerylistmanager;
 
+import com.sun.xml.internal.rngom.parse.compact.UCode_UCodeESC_CharStream;
 import com.szymonharabasz.grocerylistmanager.domain.ExpirablePayload;
 import com.szymonharabasz.grocerylistmanager.service.HashingService;
 import com.szymonharabasz.grocerylistmanager.service.UserService;
@@ -28,23 +29,28 @@ import java.util.Optional;
 @RequestScoped
 public class RequestPasswordResetBacking {
 
-    @Inject
-    private FacesContext facesContext;
-
-    @Inject
-    private ExternalContext externalContext;
-
-    @Inject
-    UserService userService;
-
-    @Inject
-    HashingService hashingService;
-
-    @Inject
-    private Event<UserTokenWrapper> event;
+    private final FacesContext facesContext;
+    private final ExternalContext externalContext;
+    private final UserService userService;
+    private final HashingService hashingService;
+    private final Event<UserTokenWrapper> event;
 
     @Email
     private String email;
+
+    @Inject
+    public RequestPasswordResetBacking (
+            FacesContext facesContext,
+            UserService userService,
+            HashingService hashingService,
+            Event<UserTokenWrapper> event
+    ) {
+        this.facesContext = facesContext;
+        this.externalContext = facesContext.getExternalContext();
+        this.userService = userService;
+        this.hashingService = hashingService;
+        this.event = event;
+    }
 
     public String getEmail() {
         return email;

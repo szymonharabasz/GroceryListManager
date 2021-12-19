@@ -3,17 +3,20 @@ package com.szymonharabasz.grocerylistmanager.view;
 import com.szymonharabasz.grocerylistmanager.domain.GroceryItem;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Objects;
+
+import static org.apache.commons.lang3.ObjectUtils.compare;
 
 public class GroceryItemView implements Serializable {
     private String id;
     private boolean done;
     private String name;
     private String unit;
-    private float quantity;
+    private BigDecimal quantity;
     private boolean edited;
 
-    public GroceryItemView(String id, boolean done, String name, String unit, float quantity) {
+    public GroceryItemView(String id, boolean done, String name, String unit, BigDecimal quantity) {
         this.id = id;
         this.done = done;
         this.name = name;
@@ -62,11 +65,11 @@ public class GroceryItemView implements Serializable {
         this.unit = unit;
     }
 
-    public float getQuantity() {
+    public BigDecimal getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(float quantity) {
+    public void setQuantity(BigDecimal quantity) {
         this.quantity = quantity;
     }
 
@@ -83,7 +86,7 @@ public class GroceryItemView implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         GroceryItemView that = (GroceryItemView) o;
-        return Float.compare(that.quantity, quantity) == 0 && name.equals(that.name) && Objects.equals(unit, that.unit);
+        return compare(that.quantity, quantity) == 0 && name.equals(that.name) && Objects.equals(unit, that.unit);
     }
 
     @Override

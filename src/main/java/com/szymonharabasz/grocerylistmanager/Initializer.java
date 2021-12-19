@@ -13,6 +13,7 @@ import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.enterprise.inject.Vetoed;
 import javax.inject.Inject;
+import java.math.BigDecimal;
 import java.security.spec.InvalidKeySpecException;
 import java.util.UUID;
 import java.util.logging.Logger;
@@ -33,8 +34,8 @@ public class Initializer {
     public void loadLists() {
         String listId1 = generateID();
         GroceryList list1 = new GroceryList(listId1, "Aldi", "Shopping list for Aldi");
-        list1.addItem(new GroceryItem(generateID(), false,"Potatoes", "kg", 1.0f));
-        list1.addItem(new GroceryItem(generateID(), false,"Tomatoes", "kg", 0.5f));
+        list1.addItem(new GroceryItem(generateID(), false,"Potatoes", "kg", BigDecimal.valueOf(1.0)));
+        list1.addItem(new GroceryItem(generateID(), false,"Tomatoes", "kg", BigDecimal.valueOf(0.5)));
         GroceryList list2 = new GroceryList(generateID(), "Rewe", "Shopping list for Rewe");
         listsService.saveList(list1);
         listsService.saveList(list2);

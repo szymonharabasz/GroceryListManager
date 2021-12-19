@@ -17,6 +17,7 @@ import javax.inject.Named;
 import javax.security.enterprise.SecurityContext;
 import java.io.IOException;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.security.Principal;
 import java.util.*;
 import java.util.logging.Logger;
@@ -27,21 +28,26 @@ import java.util.stream.Collectors;
 public class ListsController implements Serializable {
     private final ListsService listsService;
     private final UserService userService;
-    @Inject
-    private SecurityContext securityContext;
-    @Inject
-    private ExternalContext externalContext;
-    @Inject
-    private FacesContext facesContext;
-    private Date creationDate = new Date();
+    private final SecurityContext securityContext;
+    private final ExternalContext externalContext;
+    private final FacesContext facesContext;
+    private final Date creationDate = new Date();
     private List<GroceryListView> lists = new ArrayList<>();
     private String greeting;
     private Logger logger = Logger.getLogger(ListsController.class.getName());
 
     @Inject
-    public ListsController(ListsService listsService, UserService userService) {
+    public ListsController(
+            ListsService listsService,
+            UserService userService,
+            FacesContext facesContext,
+            SecurityContext securityContext
+    ) {
         this.listsService = listsService;
         this.userService = userService;
+        this.facesContext = facesContext;
+        this.externalContext = facesContext.getExternalContext();
+        this.securityContext = securityContext;
         this.greeting = "Yellow";
     }
 
@@ -125,7 +131,7 @@ public class ListsController implements Serializable {
     }
 
     public void addItem(String listId) {
-        GroceryItemView item = new GroceryItemView(UUID.randomUUID().toString(), false,"", "", 0.0f);
+        GroceryItemView item = new GroceryItemView(UUID.randomUUID().toString(), false,"", "", BigDecimal.valueOf(0.0));
         item.setEdited(true);
         findList(listId).ifPresent(list -> {
             logger.severe("Adding item to list " + list.getName());

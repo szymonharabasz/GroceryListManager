@@ -28,14 +28,16 @@ public class ResetPasswordBacking implements Serializable {
     private User user;
     private Salt salt;
 
-    @Inject
-    private UserService userService;
+    private final UserService userService;
+    private final HashingService hashingService;
+    private final ExternalContext externalContext;
 
     @Inject
-    private HashingService hashingService;
-
-    @Inject
-    private ExternalContext externalContext;
+    public ResetPasswordBacking(UserService userService, HashingService hashingService, FacesContext facesContext) {
+        this.userService = userService;
+        this.hashingService = hashingService;
+        this.externalContext = facesContext.getExternalContext();
+    }
 
     public void load() {
         Optional<User> maybeUser = userService.findByName(userName);
@@ -45,7 +47,7 @@ public class ResetPasswordBacking implements Serializable {
                 user = usr;
                 salt = slt;
                 String tokenHash = HashingService.createHash(token, salt);
-                if (!Objects.equals(tokenHash, user.getPasswordResetTokenHash())) {
+                if (!Objects.equals(tokenHash, user.getPasswordResetTokenHash().getPayload())) {
                     showError();
                 }
             });

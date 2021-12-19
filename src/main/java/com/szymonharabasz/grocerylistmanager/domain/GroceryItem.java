@@ -5,7 +5,10 @@ import jakarta.nosql.mapping.Entity;
 import jakarta.nosql.mapping.Id;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Objects;
+
+import static org.apache.commons.lang3.ObjectUtils.compare;
 
 @Entity("GroceryItem")
 public class GroceryItem implements Serializable {
@@ -18,11 +21,11 @@ public class GroceryItem implements Serializable {
     @Column
     private String unit;
     @Column
-    private float quantity;
+    private BigDecimal quantity;
 
     public GroceryItem() {}
 
-    public GroceryItem(String id, boolean done, String name, String unit, float quantity) {
+    public GroceryItem(String id, boolean done, String name, String unit, BigDecimal quantity) {
         this.id = id;
         this.done = done;
         this.name = name;
@@ -62,11 +65,11 @@ public class GroceryItem implements Serializable {
         this.unit = unit;
     }
 
-    public float getQuantity() {
+    public BigDecimal getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(float quantity) {
+    public void setQuantity(BigDecimal quantity) {
         this.quantity = quantity;
     }
 
@@ -75,7 +78,7 @@ public class GroceryItem implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         GroceryItem that = (GroceryItem) o;
-        return Float.compare(that.quantity, quantity) == 0 && name.equals(that.name) && Objects.equals(unit, that.unit);
+        return compare(that.quantity, quantity) == 0 && name.equals(that.name) && Objects.equals(unit, that.unit);
     }
 
     @Override
