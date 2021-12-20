@@ -1,16 +1,11 @@
 package com.szymonharabasz.grocerylistmanager;
 
-import com.sun.xml.internal.rngom.parse.compact.UCode_UCodeESC_CharStream;
 import com.szymonharabasz.grocerylistmanager.domain.ExpirablePayload;
 import com.szymonharabasz.grocerylistmanager.service.HashingService;
 import com.szymonharabasz.grocerylistmanager.service.UserService;
 import com.szymonharabasz.grocerylistmanager.service.UserTokenWrapper;
 import org.apache.commons.lang3.RandomStringUtils;
 
-import javax.annotation.Resource;
-import javax.ejb.Timeout;
-import javax.ejb.Timer;
-import javax.ejb.TimerService;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.event.Event;
 import javax.faces.application.FacesMessage;
@@ -23,7 +18,6 @@ import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Date;
-import java.util.Optional;
 
 @Named
 @RequestScoped
@@ -39,12 +33,9 @@ public class RequestPasswordResetBacking {
     private String email;
 
     @Inject
-    public RequestPasswordResetBacking (
+    public RequestPasswordResetBacking(
             FacesContext facesContext,
-            UserService userService,
-            HashingService hashingService,
-            Event<UserTokenWrapper> event
-    ) {
+            UserService userService, HashingService hashingService, Event<UserTokenWrapper> event) {
         this.facesContext = facesContext;
         this.externalContext = facesContext.getExternalContext();
         this.userService = userService;

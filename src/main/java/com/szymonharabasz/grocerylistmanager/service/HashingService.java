@@ -19,13 +19,15 @@ import java.util.Optional;
 @ApplicationScoped
 public class HashingService {
     private final SaltRepository saltRepository;
-    private static SecureRandom random = new SecureRandom();
+    private static final SecureRandom random = new SecureRandom();
     private static SecretKeyFactory factory;
 
     @Inject
     public HashingService(SaltRepository saltRepository) {
         this.saltRepository = saltRepository;
     }
+
+    public HashingService() { this(null); }
 
     static {
         try {

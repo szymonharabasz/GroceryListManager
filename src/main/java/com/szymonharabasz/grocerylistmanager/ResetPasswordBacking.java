@@ -66,11 +66,15 @@ public class ResetPasswordBacking implements Serializable {
         user.setPasswordHash(newPasswordHash);
         user.setPasswordResetTokenHash(null);
         userService.save(user);
+        showConfirmation();
+    }
+
+    private void showConfirmation() {
         try {
             externalContext.redirect(externalContext.getRequestContextPath() + "/message.xhtml?type=password-changed");
         } catch (IOException e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                    "An error has occured when redirecting to the confirmation page.", null));
+                    "An error has occured.", null));
         }
     }
 
@@ -79,7 +83,7 @@ public class ResetPasswordBacking implements Serializable {
             externalContext.redirect(externalContext.getRequestContextPath() + "/message.xhtml?type=wrong-token");
         } catch (IOException e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                    "An error has occured when redirecting to the message page.", null));
+                    "An error has occured.", null));
         }
     }
 

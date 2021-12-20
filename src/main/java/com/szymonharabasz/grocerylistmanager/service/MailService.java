@@ -24,6 +24,8 @@ public class MailService {
         this.servletContext = servletContext;
     }
 
+    public MailService() { this(null); }
+
     public void sendConfirmation(@ObservesAsync User user) throws MessagingException {
         Message message = createMessage();
         message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(user.getEmail()));
