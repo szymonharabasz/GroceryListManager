@@ -24,13 +24,17 @@ import static javax.ws.rs.core.Response.Status.*;
 @Named
 @RequestScoped
 public class ConfirmationEmailBacking {
-    @Inject
-    private UserService userService;
 
-    @Inject
-    private ExternalContext externalContext;
+    private final UserService userService;
+    private final ExternalContext externalContext;
 
     private String token;
+
+    @Inject
+    public ConfirmationEmailBacking(UserService userService, FacesContext facesContext) {
+        this.userService = userService;
+        this.externalContext = facesContext.getExternalContext();
+    }
 
     public void confirmEmail() {
         System.out.println("TOKEN " + token);

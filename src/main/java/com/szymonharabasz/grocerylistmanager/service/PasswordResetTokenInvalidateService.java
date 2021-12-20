@@ -13,13 +13,15 @@ import java.util.logging.Logger;
 
 @Singleton
 public class PasswordResetTokenInvalidateService {
-    Logger logger = Logger.getLogger(PasswordResetTokenInvalidateService.class.getName());
-
+    private final Logger logger = Logger.getLogger(PasswordResetTokenInvalidateService.class.getName());
     @Resource
     private TimerService timerService;
+    private final UserService userService;
 
     @Inject
-    private UserService userService;
+    public PasswordResetTokenInvalidateService(UserService userService) {
+        this.userService = userService;
+    }
 
     public void sendPasswordReset(@ObservesAsync UserTokenWrapper userTokenWrapper) {
         String passwordResetTokenHash = userTokenWrapper.getToken();

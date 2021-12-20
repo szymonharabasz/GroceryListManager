@@ -17,13 +17,12 @@ import java.util.Set;
 @Named
 @ApplicationScoped
 public class MongoIdentityStore implements IdentityStore {
-    private Set<String> userAdminRoleSet;
-
-    @Inject
+    private final Set<String> userAdminRoleSet;
     UserService userService;
 
-    @PostConstruct
-    void init() {
+    @Inject
+    public MongoIdentityStore(UserService userService) {
+        this.userService = userService;
         this.userAdminRoleSet = new HashSet<>(Arrays.asList("USER", "ADMIN"));
     }
 

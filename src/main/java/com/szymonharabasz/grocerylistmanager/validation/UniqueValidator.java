@@ -7,10 +7,15 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 public class UniqueValidator implements ConstraintValidator<Unique, String> {
-    @Inject
-    UserService userService;
+
+    private final UserService userService;
 
     private String fieldName;
+
+    @Inject
+    public UniqueValidator(UserService userService) {
+        this.userService = userService;
+    }
 
     @Override
     public void initialize(final Unique unique) {
@@ -20,10 +25,6 @@ public class UniqueValidator implements ConstraintValidator<Unique, String> {
     @Override
     public boolean isValid(String s, ConstraintValidatorContext constraintValidatorContext) {
         System.err.println("!!!! UNIQUE VALIDATOR HAS BEEN CALLED !!!!");
-        if (userService.findBy(fieldName, s).isPresent()) {
-            return false;
-        } else {
-            return true;
-        }
+        return !userService.findBy(fieldName, s).isPresent();
     }
 }

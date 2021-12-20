@@ -11,10 +11,14 @@ import java.util.logging.Logger;
 @Singleton
 @Startup
 public class CleanupTokensService {
-    Logger logger = Logger.getLogger(CleanupTokensService.class.getName());
+    private final Logger logger = Logger.getLogger(CleanupTokensService.class.getName());
+
+    private final UserService userService;
 
     @Inject
-    private UserService userService;
+    public CleanupTokensService(UserService userService) {
+        this.userService = userService;
+    }
 
     @Schedule(minute = "*/10", hour = "*", persistent = false)
     public void clesanupTokens() {

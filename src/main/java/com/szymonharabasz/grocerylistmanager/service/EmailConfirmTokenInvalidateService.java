@@ -13,13 +13,15 @@ import java.util.logging.Logger;
 
 @Singleton
 public class EmailConfirmTokenInvalidateService {
-    Logger logger = Logger.getLogger(EmailConfirmTokenInvalidateService.class.getName());
-
+    private final Logger logger = Logger.getLogger(EmailConfirmTokenInvalidateService.class.getName());
     @Resource
     private TimerService timerService;
+    private final UserService userService;
 
     @Inject
-    private UserService userService;
+    public EmailConfirmTokenInvalidateService(UserService userService) {
+        this.userService = userService;
+    }
 
     public void sendPasswordReset(@ObservesAsync User user) {
         timerService.createTimer(48 * 60 * 60 * 1000, user);

@@ -21,20 +21,21 @@ import java.util.Optional;
 
 @Named
 public class RequestNewConfirmationBacking {
-    @Inject
-    private UserService userService;
+
+    private final UserService userService;
+    private final SecurityContext securityContext;
+    private final ExternalContext externalContext;
+    private final FacesContext facesContext;
+    private final Event<User> userEvent;
 
     @Inject
-    private SecurityContext securityContext;
-
-    @Inject
-    private ExternalContext externalContext;
-
-    @Inject
-    private FacesContext facesContext;
-
-    @Inject
-    private Event<User> userEvent;
+    public RequestNewConfirmationBacking(UserService userService, SecurityContext securityContext, FacesContext facesContext, Event<User> userEvent) {
+        this.userService = userService;
+        this.securityContext = securityContext;
+        this.externalContext = facesContext.getExternalContext();
+        this.facesContext = facesContext;
+        this.userEvent = userEvent;
+    }
 
     public void request() {
         Date expiresAt = Date.from(Instant.now().plus(Duration.ofDays(2)));

@@ -17,8 +17,12 @@ import java.util.Properties;
 @ApplicationScoped
 public class MailService {
 
+    private final ServletContext servletContext;
+
     @Inject
-    private ServletContext servletContext;
+    public MailService(ServletContext servletContext) {
+        this.servletContext = servletContext;
+    }
 
     public void sendConfirmation(@ObservesAsync User user) throws MessagingException {
         Message message = createMessage();

@@ -20,23 +20,23 @@ import java.io.IOException;
 @Named
 @RequestScoped
 public class LoginBacking {
-    @Inject
-    private SecurityContext securityContext;
-
-    @Inject
-    private FacesContext facesContext;
-
-    @Inject
-    private ExternalContext externalContext;
-
-    @Inject
-    private UserService userService;
-
-    @Inject
-    private HashingService hashingService;
+    private final SecurityContext securityContext;
+    private final FacesContext facesContext;
+    private final ExternalContext externalContext;
+    private final UserService userService;
+    private final HashingService hashingService;
 
     private String username;
     private String password;
+
+    @Inject
+    public LoginBacking(SecurityContext securityContext, FacesContext facesContext, UserService userService, HashingService hashingService) {
+        this.securityContext = securityContext;
+        this.facesContext = facesContext;
+        this.externalContext = facesContext.getExternalContext();
+        this.userService = userService;
+        this.hashingService = hashingService;
+    }
 
     public String getUsername() {
         return username;

@@ -23,7 +23,7 @@ import static jakarta.nosql.document.DocumentQuery.select;
 @ApplicationScoped
 public class ListsService {
 
-    Logger logger = Logger.getLogger(ListsService.class.getName());
+    private final Logger logger = Logger.getLogger(ListsService.class.getName());
 
     @Inject
     @Database(DatabaseType.DOCUMENT)

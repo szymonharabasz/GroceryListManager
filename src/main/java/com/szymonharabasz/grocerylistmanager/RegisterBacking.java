@@ -28,24 +28,12 @@ import java.util.Optional;
 @Named
 @RequestScoped
 public class RegisterBacking {
-
-    @Inject
-    private UserService userService;
-
-    @Inject
-    private HashingService hashingService;
-
-    @Inject
-    private MailService mailService;
-
-    @Inject
-    private Event<User> userRegistrationEvent;
-
-    @Inject
-    private FacesContext facesContext;
-
-    @Inject
-    private ExternalContext externalContext;
+    private final UserService userService;
+    private final HashingService hashingService;
+    private final MailService mailService;
+    private final Event<User> userRegistrationEvent;
+    private final FacesContext facesContext;
+    private final ExternalContext externalContext;
 
     @NotBlank
     @Alphanumeric
@@ -62,6 +50,16 @@ public class RegisterBacking {
     @Email
     @Unique(name = "email", message = "this e-mail address has been already regustered")
     private String email;
+
+    @Inject
+    public RegisterBacking(UserService userService, HashingService hashingService, MailService mailService, Event<User> userRegistrationEvent, FacesContext facesContext) {
+        this.userService = userService;
+        this.hashingService = hashingService;
+        this.mailService = mailService;
+        this.userRegistrationEvent = userRegistrationEvent;
+        this.facesContext = facesContext;
+        this.externalContext = facesContext.getExternalContext();
+    }
 
     public String getUsername() {
         return username;

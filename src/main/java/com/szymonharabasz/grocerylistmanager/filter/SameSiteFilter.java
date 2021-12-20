@@ -11,7 +11,7 @@ import java.util.logging.Logger;
 @WebFilter(filterName = "sameSiteFilter", urlPatterns = "/*")
 public class SameSiteFilter implements Filter {
 
-    Logger logger = Logger.getLogger(SameSiteFilter.class.getName());
+    private final Logger logger = Logger.getLogger(SameSiteFilter.class.getName());
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {

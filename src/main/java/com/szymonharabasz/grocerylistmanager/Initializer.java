@@ -23,13 +23,19 @@ import static com.szymonharabasz.grocerylistmanager.Utils.generateID;
 @Singleton
 //@Startup
 public class Initializer {
+
+    private final ListsService listsService;
+    private final UserService userService;
+    private final HashingService hashingService;
+    private final Logger logger = Logger.getLogger(Initializer.class.getName());
+
     @Inject
-    private ListsService listsService;
-    @Inject
-    private UserService userService;
-    @Inject
-    private HashingService hashingService;
-    private Logger logger = Logger.getLogger(Initializer.class.getName());
+    public Initializer(ListsService listsService, UserService userService, HashingService hashingService) {
+        this.listsService = listsService;
+        this.userService = userService;
+        this.hashingService = hashingService;
+    }
+
     @PostConstruct
     public void loadLists() {
         String listId1 = generateID();

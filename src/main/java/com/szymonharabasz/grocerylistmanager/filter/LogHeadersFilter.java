@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 
 @WebFilter(filterName = "logHeadersFilter", urlPatterns = "/*")
 public class LogHeadersFilter implements Filter {
-    private Logger logger = Logger.getLogger(LogHeadersFilter.class.getName());
+    private final Logger logger = Logger.getLogger(LogHeadersFilter.class.getName());
     
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
