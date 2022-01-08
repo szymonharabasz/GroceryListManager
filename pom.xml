@@ -147,7 +147,6 @@
                         <layer>undertow</layer>
                         <layer>core-management</layer>
                         <layer>security-manager</layer>
-                        <!-- <layer>web-console</layer> -->
                         <layer>mail</layer>
                     </layers>
                     <excluded-layers>
@@ -163,7 +162,7 @@
                             <!-- <script-files>
                                 <script>../scripts/add-user.cli</script>
                             </script-files> -->
-                        </cli-session>
+                       </cli-session>
                     </cli-sessions>
                     <plugin-options>
                         <jboss-fork-embedded>${plugin.fork.embedded}</jboss-fork-embedded>
