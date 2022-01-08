@@ -147,7 +147,7 @@
                         <layer>undertow</layer>
                         <layer>core-management</layer>
                         <layer>security-manager</layer>
-                        <layer>web-console</layer>
+                        <!-- <layer>web-console</layer> -->
                         <layer>mail</layer>
                     </layers>
                     <excluded-layers>
@@ -160,9 +160,9 @@
                             </script-files>
                         </cli-session>
                         <cli-session>
-                            <script-files>
+                            <!-- <script-files>
                                 <script>../scripts/add-user.cli</script>
-                            </script-files>
+                            </script-files> -->
                         </cli-session>
                     </cli-sessions>
                     <plugin-options>
