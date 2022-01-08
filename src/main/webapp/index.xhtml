@@ -4,131 +4,291 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://java.sun.com/jsf/core">
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:f="http://java.sun.com/jsf/core"
+>
 <f:metadata>
     <f:event type="preRenderView" listener="#{listsController.checkConfirmed}"/>
     <f:event type="preRenderView" listener="#{listsController.fetchLists}"/>
 </f:metadata>
 <h:head>
     <title>Grocery List Manager</title>
-    <h:outputStylesheet library="css" name="index.css?#{listsController.creationDate}"/>
+    <h:outputStylesheet name="css/index.css?#{listsController.creationDate}"/>
 </h:head>
 <h:body>
     <div class="ui-g">
         <div class="ui-g-8">
-                <h4>
-                    <p:outputLabel value="Hello, #{request.userPrincipal.name}"/>
-                </h4>
+            <h4>
+                <p:outputLabel value="Hello, #{request.userPrincipal.name}"/>
+            </h4>
         </div>
         <h:form styleClass="ui-g-4" style="align-items: center">
             <p:commandButton ajax="false" action="#{logoutBacking.handleLogout}" value="Logout" style="float: right"/>
         </h:form>
     </div>
-<!--    <p:outputPanel>-->
-        <div class="ui-g">
-            <div class="ui-g-2"></div>
-            <div class="ui-g-8">
-                <p:dataView value="#{listsController.lists}" var="list" varStatus="status" layout="list">
-                    <p:dataViewListItem>
-                        <h:form>
-                            <div class="ui-g-12" style="font-weight: bold; background-color: whitesmoke">
-                                <div class="ui-g-2">
-                                    <h:outputText id="outName#{list.id}" rendered="#{!list.edited}"
-                                                  value="#{list.name}"/>
-                                    <p:inputText styleClass="ui-g-12" label="inName#{list.id}" id="inName#{list.id}"
-                                                 rendered="#{list.edited}"
-                                                 value="#{list.name}"/>
-                                </div>
-                                <div class="ui-g-6">
-                                    <h:outputText id="outDesc#{list.id}" rendered="#{!list.edited}"
-                                                  value="#{list.description}"/>
-                                    <p:inputText styleClass="ui-g-12" label="inDesc#{list.id}" id="inDesc#{list.id}"
-                                                 rendered="#{list.edited}"
-                                                 value="#{list.description}"/>
-                                </div>
-                                <div class="ui-g-4" style="text-align: right">
-                                    <p:commandLink rendered="#{!list.expanded}" value="Expand">
-                                        <p:ajax event="click" listener="#{listsController.expand(list.id)}"
-                                                process="@all" update="@all"/>
-                                    </p:commandLink>
-                                    <p:commandLink rendered="#{list.expanded}" value="Collapse">
-                                        <p:ajax event="click" listener="#{listsController.collapse(list.id)}"
-                                                process="@all" update="@all"/>
-                                    </p:commandLink>
-                                    <p:commandLink rendered="#{!list.edited}" value="Edit #{status.index}"
-                                                   label="btnEdit#{list.id}">
-                                        <p:ajax event="click" listener="#{listsController.editList(list.id)}"
-                                                process="@all" update="@all"/>
-                                    </p:commandLink>
-                                    <p:commandLink rendered="#{list.edited}" value="Save">
-                                        <p:ajax event="click" listener="#{listsController.saveList(list.id)}"
-                                                process="@all" update="@all"/>
-                                    </p:commandLink>
-                                    <p:commandLink value="Delete">
+    <!--    <p:outputPanel>-->
+    <div class="ui-g">
+        <div class="ui-g-2"></div>
+        <div class="ui-g-8">
+            <p:dataView value="#{listsController.lists}" var="list" varStatus="status" layout="list">
+                <p:dataViewListItem>
+                    <h:form>
+                        <div class="ui-g-12" style="font-weight: bold; background-color: whitesmoke">
+                            <div class="ui-g-2">
+                                <h:outputText id="outName#{list.id}" rendered="#{!list.edited}"
+                                              value="#{list.name}"/>
+                                <p:inputText styleClass="ui-g-12" label="inName#{list.id}" id="inName#{list.id}"
+                                             rendered="#{list.edited}"
+                                             value="#{list.name}"/>
+                            </div>
+                            <div class="ui-g-4">
+                                <h:outputText id="outDesc#{list.id}" rendered="#{!list.edited}"
+                                              value="#{list.description}"/>
+                                <p:inputText styleClass="ui-g-12" label="inDesc#{list.id}" id="inDesc#{list.id}"
+                                             rendered="#{list.edited}"
+                                             value="#{list.description}"/>
+                            </div>
+                            <div class="ui-g-2">
+                                <h:outputText value="Last modified "/><br/>
+                                <h:outputText id="outLastModified#{list.id}" value="#{list.lastModified}">
+                                    <f:convertDateTime pattern="dd MMM yyyy HH:mm"/>
+                                </h:outputText>
+                            </div>
+                            <div class="ui-g-4" style="text-align: right">
+                                <p:commandLink value="" id="linkUp">
+                                    <i class="pi pi-angle-up"/>
+                                    <p:ajax event="click" listener="#{listsController.moveUp(list.id)}"
+                                            process="@all" update="@all"/>
+                                </p:commandLink>
+                                <p:tooltip for="linkUp" value="Move list up"/>
+                                <p:commandLink value="" id="linkDown">
+                                    <i class="pi pi-angle-down"/>
+                                    <p:ajax event="click" listener="#{listsController.moveDown(list.id)}"
+                                            process="@all" update="@all"/>
+                                </p:commandLink>
+                                <p:tooltip for="linkDown" value="Move list down"/>
+                                <p:commandLink rendered="#{!list.expanded}" value="" id="linkExpand">
+                                    <i class="pi pi-caret-down"/>
+                                    <p:ajax event="click" listener="#{listsController.expand(list.id)}"
+                                            process="@all" update="@all"/>
+                                </p:commandLink>
+                                <p:tooltip for="linkExpand" value="Expand list"/>
+                                <p:commandLink rendered="#{list.expanded}" value="" id="linkCollapse">
+                                    <i class="pi pi-caret-up"/>
+                                    <p:ajax event="click" listener="#{listsController.collapse(list.id)}"
+                                            process="@all" update="@all"/>
+                                </p:commandLink>
+                                <p:tooltip for="linkCollapse" value="Collapse list"/>
+                                <p:commandLink rendered="#{!list.edited}" value="" id="linkEdit"
+                                               label="btnEdit#{list.id}">
+                                    <i class="pi pi-pencil"/>
+                                    <p:ajax event="click" listener="#{listsController.editList(list.id)}"
+                                            process="@all" update="@all"/>
+                                </p:commandLink>
+                                <p:tooltip for="linkEdit" value="Edit list header"/>
+                                <p:commandLink rendered="#{list.edited}" value="" id="linkSave">
+                                    <i class="pi pi-save"/>
+                                    <p:ajax event="click" listener="#{listsController.saveList(list.id)}"
+                                            process="@all" update="@all"/>
+                                </p:commandLink>
+                                <p:tooltip for="linkSave" value="Save list header"/>
+                                <p:commandLink value="" id="linkShare">
+                                    <i class="pi pi-share-alt"/>
+                                    <p:ajax event="click" listener="#{listsController.openDlgShareList(list.id)}"
+                                            process="@all" update="@all"/>
+                                </p:commandLink>
+                                <p:tooltip for="linkShare" value="Share list"/>
+                                <p:commandLink value="" id="linkDelete" onclick="PF('dlgDeleteList').show()">
+                                    <i class="pi pi-trash"/>
+                                </p:commandLink>
+                                <p:tooltip for="linkDelete" value="Delete list"/>
+                            </div>
+                            <p:dialog header="Delete list?" widgetVar="dlgDeleteList" minHeight="40" width="400"
+                                      showEffect="fade">
+                                <p class="p-m-0">
+                                    Are you sure you want to delete this list?
+                                </p>
+                                <f:facet name="footer">
+                                    <p:commandButton value="Cancel" onclick="PF('dlgDeleteList').hide()"
+                                                     styleClass="ui-button-flat p-mr-2">
+                                    </p:commandButton>
+                                    <p:commandButton value="Delete" styleClass="ui-button-danger p-mr-2">
                                         <p:ajax event="click" listener="#{listsController.removeList(list.id)}"
                                                 process="@all" update="@all"/>
-                                    </p:commandLink>
-                                </div>
-                            </div>
-                            <div>
-                                <p:dataView value="#{list.items}" var="item" rendered="#{list.expanded}">
-                                    <p:dataViewListItem>
-                                        <div class="ui-g-12">
-                                            <div class="ui-g-1">
-                                                <p:selectBooleanCheckbox value="#{item.done}">
-                                                    <p:ajax listener="#{listsController.toggleDone(item.id, list.id)}"
-                                                            process="@all" update="@all"/>
-                                                </p:selectBooleanCheckbox>
-                                            </div>
-                                            <div class="ui-g-5">
-                                                <h:outputText value="#{item.name}" rendered="#{!item.edited}"/>
-                                                <p:inputText styleClass="ui-g-12" value="#{item.name}" rendered="#{item.edited}"/>
-                                            </div>
-                                            <div class="ui-g-1">
-                                                <h:outputText value="#{item.quantity}" rendered="#{!item.edited}"/>
-                                                <p:inputText styleClass="ui-g-12" value="#{item.quantity}" rendered="#{item.edited}"/>
-                                            </div>
-                                            <div class="ui-g-1">
-                                                <h:outputText value="#{item.unit}" rendered="#{!item.edited}"/>
-                                                <p:inputText styleClass="ui-g-12" value="#{item.unit}" rendered="#{item.edited}"/>
-                                            </div>
-                                            <div class="ui-g-3 ui-g-offset-1" style="text-align: right">
-                                                <p:commandLink rendered="#{!item.edited}" value="Edit">
-                                                    <p:ajax event="click"
-                                                            listener="#{listsController.editItem(item.id)}"
-                                                            process="@all" update="@all"/>
-                                                </p:commandLink>
-                                                <p:commandLink rendered="#{item.edited}" value="Save">
-                                                    <p:ajax event="click"
-                                                            listener="#{listsController.saveItem(item.id, list.id)}"
-                                                            process="@all" update="@all"/>
-                                                </p:commandLink>
-                                                <p:commandLink value="Delete">
+                                    </p:commandButton>
+                                </f:facet>
+                            </p:dialog>
+                        </div>
+                        <div>
+                            <p:dataView value="#{list.items}" var="item" rendered="#{list.expanded}">
+                                <p:dataViewListItem>
+                                    <div class="ui-g-12">
+                                        <div class="ui-g-1">
+                                            <p:selectBooleanCheckbox value="#{item.done}">
+                                                <p:ajax listener="#{listsController.toggleDone(item.id, list.id)}"
+                                                        process="@all" update="@all"/>
+                                            </p:selectBooleanCheckbox>
+                                        </div>
+                                        <div class="ui-g-5">
+                                            <h:outputText value="#{item.name}" rendered="#{!item.edited}"/>
+                                            <p:inputText styleClass="ui-g-12" value="#{item.name}"
+                                                         rendered="#{item.edited}"/>
+                                        </div>
+                                        <div class="ui-g-1">
+                                            <h:outputText value="#{item.quantity}" rendered="#{!item.edited}"/>
+                                            <p:inputText styleClass="ui-g-12" value="#{item.quantity}"
+                                                         rendered="#{item.edited}"/>
+                                        </div>
+                                        <div class="ui-g-1">
+                                            <h:outputText value="#{item.unit}" rendered="#{!item.edited}"/>
+                                            <p:inputText styleClass="ui-g-12" value="#{item.unit}"
+                                                         rendered="#{item.edited}"/>
+                                        </div>
+                                        <div class="ui-g-3 ui-g-offset-1" style="text-align: right">
+                                            <p:commandLink value="" id="linkMoveItemUp">
+                                                <i class="pi pi-angle-up"/>
+                                                <p:ajax event="click"
+                                                        listener="#{listsController.moveItemUp(item.id, list.id)}"
+                                                        process="@all" update="@all"/>
+                                            </p:commandLink>
+                                            <p:tooltip for="linkMoveItemUp" value="Move item up"/>
+                                            <p:commandLink value="" id="linkMoveItemDown">
+                                                <i class="pi pi-angle-down"/>
+                                                <p:ajax event="click"
+                                                        listener="#{listsController.moveItemDown(item.id, list.id)}"
+                                                        process="@all" update="@all"/>
+                                            </p:commandLink>
+                                            <p:tooltip for="linkMoveItemDown" value="Move item down"/>
+                                            <p:commandLink rendered="#{!item.edited}" value="" id="linkEditItem">
+                                                <i class="pi pi-pencil"/>
+                                                <p:ajax event="click"
+                                                        listener="#{listsController.editItem(item.id)}"
+                                                        process="@all" update="@all"/>
+                                            </p:commandLink>
+                                            <p:tooltip for="linkEditItem" value="Edit item"/>
+                                            <p:commandLink rendered="#{item.edited}" value="" id="linkSaveItem">
+                                                <i class="pi pi-save"/>
+                                                <p:ajax event="click"
+                                                        listener="#{listsController.saveItem(item.id, list.id)}"
+                                                        process="@all" update="@all"/>
+                                            </p:commandLink>
+                                            <p:tooltip for="linkSaveItem" value="Save item"/>
+                                            <p:commandLink value="" id="linkDeleteItem"
+                                                           onclick="PF('dlgDeleteItem').show()">
+                                                <i class="pi pi-trash"/>
+                                            </p:commandLink>
+                                            <p:tooltip for="linkDeleteItem" value="Delete item"/>
+                                        </div>
+                                        <p:dialog header="Delete item?" widgetVar="dlgDeleteItem" minHeight="40"
+                                                  width="400" showEffect="fade">
+                                            <p class="p-m-0">
+                                                Are you sure you want to delete this item?
+                                            </p>
+                                            <f:facet name="footer">
+                                                <p:commandButton value="Cancel" onclick="PF('dlgDeleteItem').hide()"
+                                                                 styleClass="ui-button-flat p-mr-2">
+                                                </p:commandButton>
+                                                <p:commandButton value="Delete" styleClass="ui-button-danger p-mr-2">
                                                     <p:ajax event="click"
                                                             listener="#{listsController.removeItem(item.id)}"
                                                             process="@all" update="@all"/>
-                                                </p:commandLink>
-                                            </div>
-                                        </div>
-                                    </p:dataViewListItem>
-                                </p:dataView>
-                                <p:commandLink value="Add new item" rendered="#{list.expanded}">
-                                    <p:ajax event="click" listener="#{listsController.addItem(list.id)}" process="@all"
-                                            update="@all"/>
-                                </p:commandLink>
+                                                </p:commandButton>
+                                            </f:facet>
+                                        </p:dialog>
+                                    </div>
+                                </p:dataViewListItem>
+                            </p:dataView>
+                            <p:commandLink value="Add new item" rendered="#{list.expanded}">
+                                <p:ajax event="click" listener="#{listsController.addItem(list.id)}" process="@all"
+                                        update="@all"/>
+                            </p:commandLink>
+                        </div>
+                    </h:form>
+                </p:dataViewListItem>
+            </p:dataView>
+            <p:dialog header="Share list" widgetVar="dlgShareLists" minHeight="40" width="400" showEffect="fade">
+                <h:form id="formShare">
+                    <div class="ui-g-12">
+                        <p:outputLabel for="textNickname" value="Your nickname" style="font-weight: bold; font-size: smaller"/>
+                    </div>
+                    <div class="ui-g-12">
+                        <p:inputText id="textNickname" value="#{listsController.shareNickname}"/>
+                    </div>
+                    <div class="ui-g-12">
+                        <p:outputLabel value="Lists to share:" style="font-weight: bold; font-size: smaller"/>
+                    </div>
+                    <p:dataView id="dvListstoShare" value="#{listsController.listsToShare}" var="listToShare"
+                                varStatus="statusToShare" layout="list">
+                        <p:dataViewListItem>
+                            <div class="ui-g-11">
+                                <p:outputLabel value="#{listToShare.name}"/>
                             </div>
-                        </h:form>
-                    </p:dataViewListItem>
-                </p:dataView>
-                <div class="ui-g-12">
-                    <h:form>
+                            <div class="ui-g-1" style="text-align: right">
+                                <p:commandLink value="" id="linkDontShare">
+                                    <i class="pi pi-times"/>
+                                    <p:ajax event="click"
+                                            listener="#{listsController.removeListFromShare(listToShare.id)}"
+                                            process="@form"
+                                            update="@form"/>
+                                </p:commandLink>
+                                <p:tooltip for="linkDontShare" value="Don't share this list"/>
+                            </div>
+                        </p:dataViewListItem>
+                    </p:dataView>
+                    <div class="ui-g-12">
+                        <p:outputLabel value="Share additional list:"  style="font-weight: bold; font-size: smaller"/>
+                    </div>
+                    <div class="ui-g-11">
+                        <p:selectOneMenu rendered="#{listsController.listsNotToShare.size() > 0}" id="selListsNotToShare" value="#{listsController.toBecomeShared}">
+                            <f:selectItems value="#{listsController.listsNotToShare}"
+                                           var="listToBecomeShared" itemValue="#{listToBecomeShared.id}"
+                                           itemLabel="#{listToBecomeShared.name}"/>
+                        </p:selectOneMenu>
+                    </div>
+                    <div class="ui-g-1" style="text-align: right">
+                        <p:commandLink rendered="#{listsController.listsNotToShare.size() > 0}" value="" id="linkAddToShare">
+                            <i class="pi pi-plus"/>
+                            <p:ajax event="click" listener="#{listsController.addListToShare()}"
+                                    process="@form"
+                                    update="@form"/>
+                        </p:commandLink>
+                        <p:tooltip for="linkAddToShare" value="Share this list"/>
+                    </div>
+                    <div class="ui-g-12">
+<!--                    <f:facet name="footer">-->
+                        <p:commandButton value="Cancel" styleClass="ui-button-flat p-mr-2"
+                                         style="float: right">
+                            <p:ajax event="click" listener="#{listsController.hideDlgShareList}"
+                                    process="@form" update="@form"/>
+                        </p:commandButton>
+                        <p:commandButton value="Share" styleClass="ui-button p-mr-2"
+                                         style="float: right">
+                            <p:ajax event="click" listener="#{listsController.shareList}"
+                                    process="@form" update="@form"/>
+                        </p:commandButton>
+<!--                    </f:facet>-->
+                    </div>
+                    <div class="ui-g-12">
+                        <p:outputLabel value="Share this link:" rendered="#{listsController.linkToShareVisible}"  style="font-weight: bold; font-size: smaller"/>
+                    </div>
+                    <div class="ui-g-12" style="float: right">
+                        <p:inputText id="txtLinkToShare" style="width: 75%" readonly="true" value="#{listsController.linkToShare}" rendered="#{listsController.linkToShareVisible}"/>
+                        <p:commandButton id="btnCopy" style="width: 25%" value="Copy" rendered="#{listsController.linkToShareVisible}">
+                        </p:commandButton>
+                        <pe:clipboard id="clipCopy" trigger="btnCopy" action="copy" target="txtLinkToShare">
+                        </pe:clipboard>
+                    </div>
+                </h:form>
+            </p:dialog>
+            <div class="ui-g-12">
+                <h:form>
                     <p:commandLink value="Add new list">
                         <p:ajax event="click" listener="#{listsController.addList}" process="@all" update="@all"/>
                     </p:commandLink>
                 </h:form>
             </div>
-            </div>
         </div>
-<!--    </p:outputPanel>-->
+    </div>
+    <!--    </p:outputPanel>-->
 </h:body>
 </html>

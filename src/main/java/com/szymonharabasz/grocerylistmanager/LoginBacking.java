@@ -16,6 +16,7 @@ import javax.security.enterprise.credential.UsernamePasswordCredential;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ResourceBundle;
 
 @Named
 @RequestScoped
@@ -55,9 +56,8 @@ public class LoginBacking {
     }
 
     public void handleLogin() {
-        System.out.println("TEST VARIABLE " + externalContext.getInitParameter("testVariable"));
         userService.findByName(username).flatMap(user -> hashingService.findSaltByUserId(user.getId())).ifPresent(salt -> {
-            String passwordHash = HashingService.createHash(password, salt);
+            String passwordHash = hashingService.createHash(password, salt);
             UsernamePasswordCredential usernamePasswordCredential = new UsernamePasswordCredential(username, passwordHash);
             AuthenticationParameters authenticationParameters = AuthenticationParameters.withParams().credential(usernamePasswordCredential);
             HttpServletRequest request = (HttpServletRequest) externalContext.getRequest();
@@ -85,7 +85,7 @@ public class LoginBacking {
             externalContext.redirect(externalContext.getRequestContextPath() + to);
         } catch (IOException e) {
             facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                    "An error has occured.", null));
-        }
+                    ResourceBundle.getBundle("com.szymonharabasz.grocerylistmanager.texts")
+                            .getString("generic-error-message"), null));        }
     }
 }

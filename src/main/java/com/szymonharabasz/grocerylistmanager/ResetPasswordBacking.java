@@ -2,6 +2,7 @@ package com.szymonharabasz.grocerylistmanager;
 
 import com.szymonharabasz.grocerylistmanager.domain.Salt;
 import com.szymonharabasz.grocerylistmanager.domain.User;
+import com.szymonharabasz.grocerylistmanager.interceptors.RedirectToConfirmation;
 import com.szymonharabasz.grocerylistmanager.service.HashingService;
 import com.szymonharabasz.grocerylistmanager.service.UserService;
 
@@ -10,16 +11,16 @@ import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.ResourceBundle;
 
 @Named
-@SessionScoped
+@RequestScoped
 public class ResetPasswordBacking implements Serializable {
 
     private String userName;
@@ -42,50 +43,29 @@ public class ResetPasswordBacking implements Serializable {
     public void load() {
         Optional<User> maybeUser = userService.findByName(userName);
         maybeUser.ifPresent(usr -> {
-            Optional<Salt> maybeSalt = hashingService.findSaltByUserId(usr.getId());
-            maybeSalt.ifPresent(slt -> {
-                user = usr;
-                salt = slt;
-                String tokenHash = HashingService.createHash(token, salt);
-                if (!Objects.equals(tokenHash, user.getPasswordResetTokenHash().getPayload())) {
-                    showError();
-                }
-            });
-            System.out.println("USER IS " + user + " AND SALT IS " + salt);
-            if (!maybeSalt.isPresent()) {
+            this.salt = hashingService.findSaltByUserId(usr.getId()).orElseThrow(IllegalStateException::new);
+            this.user = usr;
+            String tokenHash = hashingService.createHash(token, salt);
+            if (!Objects.equals(tokenHash, user.getPasswordResetTokenHash().getPayload())) {
                 showError();
             }
         });
+        System.out.println("USER IS " + user + " AND SALT IS " + salt);
         if (!maybeUser.isPresent()) {
             showError();
         }
     }
 
+    @RedirectToConfirmation(type = "password-changed")
     public void resetPassword() {
-        String newPasswordHash = HashingService.createHash(newPassword, salt);
+        String newPasswordHash = hashingService.createHash(newPassword, salt);
         user.setPasswordHash(newPasswordHash);
         user.setPasswordResetTokenHash(null);
         userService.save(user);
-        showConfirmation();
     }
 
-    private void showConfirmation() {
-        try {
-            externalContext.redirect(externalContext.getRequestContextPath() + "/message.xhtml?type=password-changed");
-        } catch (IOException e) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                    "An error has occured.", null));
-        }
-    }
-
-    private void showError() {
-        try {
-            externalContext.redirect(externalContext.getRequestContextPath() + "/message.xhtml?type=wrong-token");
-        } catch (IOException e) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                    "An error has occured.", null));
-        }
-    }
+    @RedirectToConfirmation(type = "wrong-token")
+    public void showError() {  }
 
     public String getUserName() {
         return userName;
@@ -110,4 +90,5 @@ public class ResetPasswordBacking implements Serializable {
     public void setToken(String token) {
         this.token = token;
     }
+
 }

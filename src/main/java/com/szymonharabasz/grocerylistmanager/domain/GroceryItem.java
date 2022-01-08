@@ -23,8 +23,6 @@ public class GroceryItem implements Serializable {
     @Column
     private BigDecimal quantity;
 
-    public GroceryItem() {}
-
     public GroceryItem(String id, boolean done, String name, String unit, BigDecimal quantity) {
         this.id = id;
         this.done = done;
@@ -32,6 +30,8 @@ public class GroceryItem implements Serializable {
         this.unit = unit;
         this.quantity = quantity;
     }
+
+    public GroceryItem() { }
 
     public String getId() {
         return id;
@@ -78,18 +78,20 @@ public class GroceryItem implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         GroceryItem that = (GroceryItem) o;
-        return compare(that.quantity, quantity) == 0 && name.equals(that.name) && Objects.equals(unit, that.unit);
+        return Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, unit, quantity);
+        return Objects.hash(id);
     }
 
     @Override
     public String toString() {
         return "GroceryItem{" +
-                "name='" + name + '\'' +
+                "id='" + id + '\'' +
+                ", done=" + done +
+                ", name='" + name + '\'' +
                 ", unit='" + unit + '\'' +
                 ", quantity=" + quantity +
                 '}';

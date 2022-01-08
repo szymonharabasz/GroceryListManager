@@ -1,2 +1,10 @@
 # Project exclude paths
-/target/
+**/target/
+**/lib
+**/.idea
+**/.DS_Store
+**/*.jar
+**/*.war
+domain1
+system-properties
+system-properties.local

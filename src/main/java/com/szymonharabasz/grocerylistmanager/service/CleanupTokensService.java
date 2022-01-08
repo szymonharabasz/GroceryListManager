@@ -1,11 +1,9 @@
 package com.szymonharabasz.grocerylistmanager.service;
 
 import javax.ejb.Schedule;
-import javax.ejb.Schedules;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.inject.Inject;
-import java.util.Date;
 import java.util.logging.Logger;
 
 @Singleton
@@ -18,6 +16,10 @@ public class CleanupTokensService {
     @Inject
     public CleanupTokensService(UserService userService) {
         this.userService = userService;
+    }
+
+    public CleanupTokensService() {
+        this(null);
     }
 
     @Schedule(minute = "*/10", hour = "*", persistent = false)

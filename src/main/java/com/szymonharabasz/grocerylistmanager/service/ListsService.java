@@ -10,6 +10,7 @@ import jakarta.nosql.mapping.document.DocumentTemplate;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -43,6 +44,7 @@ public class ListsService {
     public void saveList(GroceryList list) {
         logger.severe("Saving list " + list.getName() + " with " + list.getItems().size() + " items.");
         logger.severe(list.toString());
+        list.setLastModified(new Date());
         repository.save(list);
     }
 
@@ -61,7 +63,7 @@ public class ListsService {
                 items.add(item);
             }
             list.setItems(items);
-            repository.save(list);
+            saveList(list);
         });
     }
 
@@ -79,7 +81,23 @@ public class ListsService {
                     list.getItems().stream().filter(item ->
                             !Objects.equals(item.getId(), id)).collect(Collectors.toList())
             );
-            repository.save(list);
+            saveList(list);
         }
+    }
+
+    public void moveItemUp(String itemId, String listId) {
+        findList(listId).ifPresent(list -> {
+            list.moveItemUp(itemId);
+            saveList(list);
+        });
+    }
+
+    public void moveItemDown(String itemId, String listId) {
+        findList(listId).ifPresent(list -> {
+            System.err.println("Before moving down: " + list);
+            list.moveItemDown(itemId);
+            System.err.println("After moving down: " + list);
+            saveList(list);
+        });
     }
 }

@@ -5,7 +5,6 @@ import javax.validation.Payload;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import java.text.MessageFormat;
 
 import static java.lang.annotation.ElementType.*;
 

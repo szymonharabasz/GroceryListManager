@@ -2,7 +2,6 @@ package com.szymonharabasz.grocerylistmanager;
 
 import com.szymonharabasz.grocerylistmanager.service.UserService;
 
-import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -42,4 +41,5 @@ public class MongoIdentityStore implements IdentityStore {
         System.err.println("Credentials validation result " + credentialValidationResult.getStatus());
         return credentialValidationResult;
     }
+
 }

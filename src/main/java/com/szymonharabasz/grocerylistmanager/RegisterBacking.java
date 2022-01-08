@@ -3,8 +3,10 @@ package com.szymonharabasz.grocerylistmanager;
 import com.szymonharabasz.grocerylistmanager.domain.ExpirablePayload;
 import com.szymonharabasz.grocerylistmanager.domain.Salt;
 import com.szymonharabasz.grocerylistmanager.domain.User;
+import com.szymonharabasz.grocerylistmanager.interceptors.RedirectToConfirmation;
 import com.szymonharabasz.grocerylistmanager.service.MailService;
 import com.szymonharabasz.grocerylistmanager.service.HashingService;
+import com.szymonharabasz.grocerylistmanager.service.RandomService;
 import com.szymonharabasz.grocerylistmanager.service.UserService;
 import com.szymonharabasz.grocerylistmanager.validation.Alphanumeric;
 import com.szymonharabasz.grocerylistmanager.validation.Password;
@@ -23,17 +25,14 @@ import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Date;
-import java.util.Optional;
+import java.util.ResourceBundle;
 
 @Named
 @RequestScoped
 public class RegisterBacking {
     private final UserService userService;
     private final HashingService hashingService;
-    private final MailService mailService;
     private final Event<User> userRegistrationEvent;
-    private final FacesContext facesContext;
-    private final ExternalContext externalContext;
 
     @NotBlank
     @Alphanumeric
@@ -52,13 +51,10 @@ public class RegisterBacking {
     private String email;
 
     @Inject
-    public RegisterBacking(UserService userService, HashingService hashingService, MailService mailService, Event<User> userRegistrationEvent, FacesContext facesContext) {
+    public RegisterBacking(UserService userService, HashingService hashingService, Event<User> userRegistrationEvent) {
         this.userService = userService;
         this.hashingService = hashingService;
-        this.mailService = mailService;
         this.userRegistrationEvent = userRegistrationEvent;
-        this.facesContext = facesContext;
-        this.externalContext = facesContext.getExternalContext();
     }
 
     public String getUsername() {
@@ -93,19 +89,12 @@ public class RegisterBacking {
         this.email = email;
     }
 
+    @RedirectToConfirmation(type = "email-sent")
     public void register() {
-        Salt salt = new Salt(Utils.generateID(), HashingService.createSalt());
+        Salt salt = hashingService.createSalt();
         hashingService.save(salt);
-        User user = new User(salt.getUserId(), username, HashingService.createHash(password, salt), email);
-        Date expiresAt = Date.from(Instant.now().plus(Duration.ofDays(2)));
-        user.setConfirmationToken(new ExpirablePayload(RandomStringUtils.randomAlphanumeric(32), expiresAt));
+        User user = userService.createUser(salt.getUserId(), username, hashingService.createHash(password, salt), email);
         userService.save(user);
         userRegistrationEvent.fireAsync(user);
-        try {
-            externalContext.redirect(externalContext.getRequestContextPath() + "/message.xhtml?type=email-sent");
-        } catch (IOException e) {
-            facesContext.addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                    "An error has occured.", null));
-        }
     }
 }

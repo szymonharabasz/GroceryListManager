@@ -1,6 +1,7 @@
 package com.szymonharabasz.grocerylistmanager;
 
 import com.szymonharabasz.grocerylistmanager.domain.User;
+import com.szymonharabasz.grocerylistmanager.interceptors.RedirectToConfirmation;
 import com.szymonharabasz.grocerylistmanager.service.UserService;
 
 import javax.enterprise.context.RequestScoped;
@@ -9,31 +10,23 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.util.Optional;
-
-import static javax.ws.rs.core.Response.Status.*;
+import java.util.ResourceBundle;
 
 @Named
 @RequestScoped
 public class ConfirmationEmailBacking {
 
     private final UserService userService;
-    private final ExternalContext externalContext;
+    private final FacesContext facesContext;
 
     private String token;
 
     @Inject
     public ConfirmationEmailBacking(UserService userService, FacesContext facesContext) {
         this.userService = userService;
-        this.externalContext = facesContext.getExternalContext();
+        this.facesContext = facesContext;
     }
 
     public void confirmEmail() {
@@ -43,20 +36,16 @@ public class ConfirmationEmailBacking {
             usr.setConfirmed(true);
             usr.setConfirmationToken(null);
             userService.save(usr);
-            FacesContext.getCurrentInstance().addMessage(null,
+            facesContext.addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Success",
                             "Your e-mail addeess has been successfully confirmed. You can now sign in to " +
                                     "your account"));
         });
-        if (!user.isPresent()) {
-            try {
-                externalContext.redirect(externalContext.getRequestContextPath() + "/message.xhtml?type=wrong-token");
-            } catch (IOException e) {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                        "An error has occured.", null));
-            }
-        }
+        if (!user.isPresent()) { showError(); }
     }
+
+    @RedirectToConfirmation(type = "wrong-token")
+    private void showError() {  }
 
     public String getToken() {
         return token;
