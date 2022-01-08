@@ -139,14 +139,14 @@
                         <layer>jsf</layer>
                         <layer>cdi</layer>
                         <layer>bean-validation</layer>
-                        <layer>management</layer>
+                        <!-- <layer>management</layer> -->
                         <layer>ee</layer>
                         <layer>ee-security</layer>
                         <layer>base-server</layer>
                         <layer>elytron</layer>
                         <layer>undertow</layer>
-                        <layer>core-management</layer>
-                        <layer>security-manager</layer>
+                        <!-- <layer>core-management</layer> -->
+                        <!-- <layer>security-manager</layer> -->
                         <!-- <layer>web-console</layer> -->
                         <layer>mail</layer>
                     </layers>
