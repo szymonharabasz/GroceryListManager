@@ -139,7 +139,7 @@
                         <layer>jsf</layer>
                         <layer>cdi</layer>
                         <layer>bean-validation</layer>
-                        <!-- <layer>management</layer> -->
+                        <layer>management</layer>
                         <layer>ee</layer>
                         <layer>ee-security</layer>
                         <layer>base-server</layer>
