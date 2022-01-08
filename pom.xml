@@ -145,7 +145,7 @@
                         <layer>base-server</layer>
                         <layer>elytron</layer>
                         <layer>undertow</layer>
-                        <!-- <layer>core-management</layer> -->
+                        <layer>core-management</layer>
                         <!-- <layer>security-manager</layer> -->
                         <!-- <layer>web-console</layer> -->
                         <layer>mail</layer>
