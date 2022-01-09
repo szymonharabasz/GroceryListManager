@@ -148,6 +148,11 @@
                         <layer>core-management</layer>
                         <layer>security-manager</layer>
                         <layer>mail</layer>
+                        <layer>web-server</layer>
+                        <layer>logging</layer>
+                        <layer>jsonb</layer>
+                        <layer>jsonp</layer>
+                        <layer>jmx</layer>
                     </layers>
                     <excluded-layers>
                         <layer>deployment-scanner</layer>
@@ -158,7 +163,7 @@
                                 <script>configure-elytron.cli</script>
                             </script-files>
                         </cli-session>
-                        <cli-session>
+                        <cli-session>   
                             <!-- <script-files>
                                 <script>../scripts/add-user.cli</script>
                             </script-files> -->
